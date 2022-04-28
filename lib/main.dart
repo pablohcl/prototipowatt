@@ -89,13 +89,115 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+            Expanded(
               child: ListView(
+                padding: EdgeInsets.all(8),
                 shrinkWrap: true,
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        color: Colors.grey[200],
+                      ),
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text('28/04/22', style: TextStyle(fontSize: 12),),
+                          Text('CML Leopoldense', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        color: Colors.grey[200],
+                      ),
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text('28/04/22', style: TextStyle(fontSize: 12),),
+                          Text('CML Leopoldense', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        color: Colors.grey[200],
+                      ),
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text('28/04/22', style: TextStyle(fontSize: 12),),
+                          Text('CML Leopoldense', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        color: Colors.grey[200],
+                      ),
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text('28/04/22', style: TextStyle(fontSize: 12),),
+                          Text('CML Leopoldense', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        color: Colors.grey[200],
+                      ),
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text('28/04/22', style: TextStyle(fontSize: 12),),
+                          Text('CML Leopoldense', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        color: Colors.grey[200],
+                      ),
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text('28/04/22', style: TextStyle(fontSize: 12),),
+                          Text('CML Leopoldense', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2.0),
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(4),
