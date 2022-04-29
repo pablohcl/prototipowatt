@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'pages/novo_cliente.dart';
+import 'pages/novo_pedido.dart';
 
 void main() {
   runApp(const MyApp());
@@ -62,7 +64,9 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => NovoCliente()));
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -84,7 +88,9 @@ class _HomePageState extends State<HomePage> {
                   width: 20,
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => NovoPedido()));
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
