@@ -5,19 +5,11 @@ class NovoCliente extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 30),
-      color: Colors.blue,
-      child: ElevatedButton(
-        child: Column(
-          children: [
-            Icon(Icons.exit_to_app),
-            Text('Voltar'),
-          ],
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Novo Cliente'),
         ),
-        onPressed: (){
-          Navigator.pop(context);
-        },
       ),
     );
   }

@@ -118,13 +118,14 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
+            SizedBox(height: 12),
             Expanded(
               child: ListView(
-                padding: EdgeInsets.all(12),
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 shrinkWrap: true,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    padding: const EdgeInsets.only(top: 4.0),
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(4),
