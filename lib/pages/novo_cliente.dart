@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
-class NovoCliente extends StatelessWidget {
-  const NovoCliente({Key? key}) : super(key: key);
+class NovoCliente extends StatefulWidget {
+  NovoCliente({Key? key}) : super(key: key);
+
+  @override
+  State<NovoCliente> createState() => _NovoClienteState();
+}
+
+class _NovoClienteState extends State<NovoCliente> {
+  String? tipoCadastro = '';
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +26,21 @@ class NovoCliente extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    tipoCadastro = 'fisica';
+                    setState(() {
+                      montaTela();
+                    });
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: isCpf()
+                        ? MaterialStateProperty.all(Colors.green)
+                        : MaterialStateProperty.all(
+                            Colors.black.withOpacity(0.2)),
+                    elevation: isCpf()
+                        ? MaterialStateProperty.all(2)
+                        : MaterialStateProperty.all(0),
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -39,7 +60,21 @@ class NovoCliente extends StatelessWidget {
                   width: 20,
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    tipoCadastro = 'juridica';
+                    setState(() {
+                      montaTela();
+                    });
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: isCnpj()
+                        ? MaterialStateProperty.all(Colors.green)
+                        : MaterialStateProperty.all(
+                            Colors.black.withOpacity(0.2)),
+                    elevation: isCnpj()
+                        ? MaterialStateProperty.all(2)
+                        : MaterialStateProperty.all(0),
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -60,44 +95,110 @@ class NovoCliente extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            Form(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Icon(
-                      Icons.person,
-                      size: 88,
-                      color: Colors.green,
-                    ),
-                    TextFormField(
-                      validator: (value){
-                        if(value!.isEmpty){
-                          return 'Insira um CPF válido!';
-                        } else if(!isCpf(value)){
-                          return 'CNPJ inválido!';
-                        }
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'CPF',
-                        labelStyle: TextStyle(color: Colors.green),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            montaTela(),
           ],
         ),
       ),
     );
   }
-  bool isCpf(String valor){
 
-    return true;
+  Widget montaTela() {
+    if (tipoCadastro == '') {
+      return Form(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Selecione o tipo',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.green,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    } else if (tipoCadastro == 'fisica') {
+      return Form(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Icon(
+                Icons.person,
+                size: 88,
+                color: Colors.green,
+              ),
+              SizedBox(height: 8,),
+              TextFormField(
+                validator: (value) {},
+                decoration: InputDecoration(
+                  labelText: 'CPF',
+                  labelStyle: TextStyle(color: Colors.green),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    } else if (tipoCadastro == 'juridica') {
+      return Form(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Icon(
+                Icons.add_business,
+                size: 88,
+                color: Colors.green,
+              ),
+              SizedBox(height: 8,),
+              TextFormField(
+                validator: (value) {},
+                decoration: InputDecoration(
+                  labelText: 'CNPJ',
+                  labelStyle: TextStyle(color: Colors.green),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return Text('Nenhum tipo selecionado!');
+    }
+  }
+
+  bool isCpf() {
+    if (tipoCadastro == 'fisica') {
+      return true;
+    } else if (tipoCadastro == '') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool isCnpj() {
+    if (tipoCadastro == 'juridica') {
+      return true;
+    } else if (tipoCadastro == '') {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
