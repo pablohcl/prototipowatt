@@ -27,10 +27,14 @@ class _NovoClienteState extends State<NovoCliente> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    tipoCadastro = 'fisica';
-                    setState(() {
-                      montaTela();
-                    });
+                    if (tipoCadastro == '') {
+                      tipoCadastro = 'fisica';
+                      setState(() {
+                        montaTela();
+                      });
+                    } else {
+                      mostrarConfirmacaoDeTroca('fisica');
+                    }
                   },
                   style: ButtonStyle(
                     backgroundColor: isCpf()
@@ -61,10 +65,14 @@ class _NovoClienteState extends State<NovoCliente> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    tipoCadastro = 'juridica';
-                    setState(() {
-                      montaTela();
-                    });
+                    if(tipoCadastro == ''){
+                      tipoCadastro = 'juridica';
+                      setState(() {
+                        montaTela();
+                      });
+                    } else {
+                      mostrarConfirmacaoDeTroca('juridica');
+                    }
                   },
                   style: ButtonStyle(
                     backgroundColor: isCnpj()
@@ -126,16 +134,18 @@ class _NovoClienteState extends State<NovoCliente> {
     } else if (tipoCadastro == 'fisica') {
       return Form(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Icon(
-                Icons.person,
+                Icons.person_add,
                 size: 88,
                 color: Colors.green,
               ),
-              SizedBox(height: 8,),
+              SizedBox(
+                height: 8,
+              ),
               TextFormField(
                 validator: (value) {},
                 decoration: InputDecoration(
@@ -162,7 +172,9 @@ class _NovoClienteState extends State<NovoCliente> {
                 size: 88,
                 color: Colors.green,
               ),
-              SizedBox(height: 8,),
+              SizedBox(
+                height: 8,
+              ),
               TextFormField(
                 validator: (value) {},
                 decoration: InputDecoration(
@@ -200,5 +212,37 @@ class _NovoClienteState extends State<NovoCliente> {
     } else {
       return false;
     }
+  }
+
+  void mostrarConfirmacaoDeTroca(String texto) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Atenção!', style: TextStyle(color: Colors.red),),
+        content: Text(
+            'Tem certeza que deseja trocar o tipo de cliente? TODOS OS DADOS DIGITADOS SERÃO PERDIDOS!'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Cancelar', style: TextStyle(color: Colors.black),),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              tipoCadastro = texto;
+              setState(() {
+                montaTela();
+              });
+            },
+            child: Text(
+              'Sim',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
