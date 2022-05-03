@@ -1,4 +1,9 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:prototipo/objects/cliente.dart';
 
 class NovoCliente extends StatefulWidget {
   NovoCliente({Key? key}) : super(key: key);
@@ -266,4 +271,16 @@ class _NovoClienteState extends State<NovoCliente> {
       ),
     );
   }
+
+  // PAREI AQUI
+
+  /*List<Cliente> parseClientes(String responseBody){
+    final parsed = jsonDecode(responseBody) as Map<String, dynamic>;
+    return parsed.map((key, value) => null);
+  }*/
+
+  /*Future<List<Cliente>> fetchDados(Client client, String cnpj) async {
+    final response = await client.get(Uri.parse('https://receitaws.com.br/v1/cnpj/$cnpj'));
+    return compute(parseClientes, response.body);
+  }*/
 }
