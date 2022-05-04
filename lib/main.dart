@@ -109,7 +109,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Ultimos Pedidos',
+                  'Últimos Pedidos',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,

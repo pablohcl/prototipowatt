@@ -1,8 +1,9 @@
 import 'dart:convert';
+import 'dart:isolate';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:prototipo/objects/cliente.dart';
 
 class NovoCliente extends StatefulWidget {
@@ -192,6 +193,21 @@ class _NovoClienteState extends State<NovoCliente> {
                 height: 8,
               ),
               TextFormField(
+                onFieldSubmitted: (text){
+                  FutureBuilder<List<Cliente>>(
+                    future: fetchDados(http.Client(), text),
+                    builder: (context, snapshot){
+                      if(snapshot.hasError){
+                        return Center(child: Text('Ocorreu um erro!'),);
+                      } else if(snapshot.hasData){
+                        final data = snapshot.data;
+                        return Text(data.toString());
+                      } else {
+                        return Center(child: CircularProgressIndicator(),);
+                      }
+                    },
+                  );
+                },
                 keyboardType: TextInputType.number,
                 controller: cnpjController,
                 validator: (value) {},
@@ -272,15 +288,14 @@ class _NovoClienteState extends State<NovoCliente> {
     );
   }
 
-  // PAREI AQUI
-
-  /*List<Cliente> parseClientes(String responseBody){
-    final parsed = jsonDecode(responseBody) as Map<String, dynamic>;
-    return parsed.map((key, value) => null);
-  }*/
-
-  /*Future<List<Cliente>> fetchDados(Client client, String cnpj) async {
+  Future<List<Cliente>> fetchDados(http.Client client, String cnpj) async {
     final response = await client.get(Uri.parse('https://receitaws.com.br/v1/cnpj/$cnpj'));
-    return compute(parseClientes, response.body);
-  }*/
+    return compute(parseDados, response.body);
+  }
+
+  List<Cliente> parseDados(String responseBody) {
+    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+
+    return parsed.map<Cliente>((json) => Cliente.fromJson(json)).toList();
+  }
 }
