@@ -29,7 +29,7 @@ class Cliente {
       razao: json['nome'] as String,
       fantasia: json['fantasia'] as String,
       cep: json['cep'] as String,
-      rua: json['rua'] as String,
+      rua: json['logradouro'] as String,
       numero: json['numero'] as String,
       bairro: json['bairro'] as String,
       cidade: json['municipio'] as String,

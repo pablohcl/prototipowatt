@@ -19,6 +19,8 @@ class _NovoClienteState extends State<NovoCliente> {
   late TextEditingController cpfController = TextEditingController();
   late TextEditingController cnpjController = TextEditingController();
 
+  late Cliente? cli;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -194,18 +196,18 @@ class _NovoClienteState extends State<NovoCliente> {
               ),
               TextFormField(
                 onFieldSubmitted: (text){
-                  FutureBuilder<List<Cliente>>(
-                    future: fetchDados(http.Client(), text),
+                  FutureBuilder<Cliente> (
                     builder: (context, snapshot){
                       if(snapshot.hasError){
                         return Center(child: Text('Ocorreu um erro!'),);
                       } else if(snapshot.hasData){
-                        final data = snapshot.data;
-                        return Text(data.toString());
+                        cnpjController.text = cli!.razao;
+                        return Text(snapshot.data!.razao);
                       } else {
                         return Center(child: CircularProgressIndicator(),);
                       }
                     },
+                    future: fetchDados(http.Client(), text),
                   );
                 },
                 keyboardType: TextInputType.number,
@@ -288,14 +290,18 @@ class _NovoClienteState extends State<NovoCliente> {
     );
   }
 
-  Future<List<Cliente>> fetchDados(http.Client client, String cnpj) async {
+  Future<Cliente> fetchDados(http.Client client, String cnpj) async {
     final response = await client.get(Uri.parse('https://receitaws.com.br/v1/cnpj/$cnpj'));
-    return compute(parseDados, response.body);
+    if(response.statusCode == 200) {
+      return Cliente.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Erro na consulta!');
+    }
   }
 
-  List<Cliente> parseDados(String responseBody) {
+  /*List<Cliente> parseDados(String responseBody) {
     final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
 
     return parsed.map<Cliente>((json) => Cliente.fromJson(json)).toList();
-  }
+  }*/
 }
