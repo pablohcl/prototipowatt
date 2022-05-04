@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:isolate';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +17,6 @@ class _NovoClienteState extends State<NovoCliente> {
 
   late TextEditingController cpfController = TextEditingController();
   late TextEditingController cnpjController = TextEditingController();
-
-  late Cliente? cli;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +41,7 @@ class _NovoClienteState extends State<NovoCliente> {
                         setState(() {
                           montaTela();
                         });
-                      } else if(tipoCadastro == 'fisica'){
+                      } else if (tipoCadastro == 'fisica') {
                         return;
                       } else {
                         mostrarConfirmacaoDeTroca('fisica');
@@ -84,7 +81,7 @@ class _NovoClienteState extends State<NovoCliente> {
                         setState(() {
                           montaTela();
                         });
-                      } else if(tipoCadastro == 'juridica'){
+                      } else if (tipoCadastro == 'juridica') {
                         return;
                       } else {
                         mostrarConfirmacaoDeTroca('juridica');
@@ -194,33 +191,37 @@ class _NovoClienteState extends State<NovoCliente> {
               SizedBox(
                 height: 8,
               ),
-              TextFormField(
-                onFieldSubmitted: (text){
-                  FutureBuilder<Cliente> (
-                    builder: (context, snapshot){
-                      if(snapshot.hasError){
-                        return Center(child: Text('Ocorreu um erro!'),);
-                      } else if(snapshot.hasData){
-                        cnpjController.text = cli!.razao;
-                        return Text(snapshot.data!.razao);
-                      } else {
-                        return Center(child: CircularProgressIndicator(),);
-                      }
-                    },
-                    future: fetchDados(http.Client(), text),
-                  );
-                },
-                keyboardType: TextInputType.number,
-                controller: cnpjController,
-                validator: (value) {},
-                decoration: InputDecoration(
-                  labelText: 'CNPJ',
-                  labelStyle: TextStyle(color: Colors.green),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 7,
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: cnpjController,
+                      validator: (value) {},
+                      decoration: InputDecoration(
+                        labelText: 'CNPJ',
+                        labelStyle: TextStyle(color: Colors.green),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  SizedBox(width: 8,),
+                  Expanded(
+                    flex: 3,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 20))
+                      ),
+                      child: Text('Buscar'),
+                      onPressed: (){},
+                    ),
+                  ),
+                ],
               ),
+              montaRestoTela(Cliente cliente);
             ],
           ),
         ),
@@ -291,17 +292,12 @@ class _NovoClienteState extends State<NovoCliente> {
   }
 
   Future<Cliente> fetchDados(http.Client client, String cnpj) async {
-    final response = await client.get(Uri.parse('https://receitaws.com.br/v1/cnpj/$cnpj'));
-    if(response.statusCode == 200) {
+    final response =
+        await client.get(Uri.parse('https://receitaws.com.br/v1/cnpj/$cnpj'));
+    if (response.statusCode == 200) {
       return Cliente.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Erro na consulta!');
     }
   }
-
-  /*List<Cliente> parseDados(String responseBody) {
-    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-
-    return parsed.map<Cliente>((json) => Cliente.fromJson(json)).toList();
-  }*/
 }
