@@ -5,6 +5,39 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototipo/objects/cliente.dart';
 
+Future<Cliente> fetchDados(String cnpj) async {
+  final response =
+      await http.get(Uri.parse('https://receitaws.com.br/v1/cnpj/$cnpj'));
+
+  if (response.statusCode == 200) {
+    return Cliente.fromJson(jsonDecode(response.body));
+  } else {
+    throw Exception('Falha ao carregar dados');
+  }
+}
+
+FutureBuilder<Cliente> montaRestoTela(String cnpj) {
+  return FutureBuilder<Cliente>(
+    future: fetchDados(cnpj),
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        return Center(
+          child: Text(
+            snapshot.data!.razao,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+            ),
+          ),
+        );
+      } else if (snapshot.hasError) {
+        return Text('${snapshot.error}');
+      }
+      return const CircularProgressIndicator();
+    },
+  );
+}
+
 class NovoCliente extends StatefulWidget {
   NovoCliente({Key? key}) : super(key: key);
 
@@ -17,6 +50,8 @@ class _NovoClienteState extends State<NovoCliente> {
 
   late TextEditingController cpfController = TextEditingController();
   late TextEditingController cnpjController = TextEditingController();
+
+  late Future<Cliente> futureCli;
 
   @override
   Widget build(BuildContext context) {
@@ -208,20 +243,23 @@ class _NovoClienteState extends State<NovoCliente> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 8,),
+                  SizedBox(
+                    width: 8,
+                  ),
                   Expanded(
                     flex: 3,
                     child: ElevatedButton(
                       style: ButtonStyle(
-                        padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 20))
-                      ),
+                          padding: MaterialStateProperty.all(
+                              EdgeInsets.symmetric(vertical: 20))),
                       child: Text('Buscar'),
-                      onPressed: (){},
+                      onPressed: montaTela,
                     ),
                   ),
                 ],
               ),
-              montaRestoTela(Cliente cliente);
+              SizedBox(height: 8,),
+              montaRestoTela(cnpjController.text),
             ],
           ),
         ),
@@ -289,15 +327,5 @@ class _NovoClienteState extends State<NovoCliente> {
         ],
       ),
     );
-  }
-
-  Future<Cliente> fetchDados(http.Client client, String cnpj) async {
-    final response =
-        await client.get(Uri.parse('https://receitaws.com.br/v1/cnpj/$cnpj'));
-    if (response.statusCode == 200) {
-      return Cliente.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Erro na consulta!');
-    }
   }
 }
