@@ -16,26 +16,30 @@ Future<Cliente> fetchDados(String cnpj) async {
   }
 }
 
-FutureBuilder<Cliente> montaRestoTela(String cnpj) {
-  return FutureBuilder<Cliente>(
-    future: fetchDados(cnpj),
-    builder: (context, snapshot) {
-      if (snapshot.hasData) {
-        return Center(
-          child: Text(
-            snapshot.data!.razao,
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 16,
+Widget montaRestoTela(String cnpj) {
+  if (cnpj.isEmpty){
+    return Text('');
+  } else {
+    return FutureBuilder<Cliente>(
+      future: fetchDados(cnpj),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Center(
+            child: Text(
+              snapshot.data!.razao,
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
             ),
-          ),
-        );
-      } else if (snapshot.hasError) {
-        return Text('${snapshot.error}');
-      }
-      return const CircularProgressIndicator();
-    },
-  );
+          );
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+        return const CircularProgressIndicator();
+      },
+    );
+  }
 }
 
 class NovoCliente extends StatefulWidget {
@@ -253,7 +257,11 @@ class _NovoClienteState extends State<NovoCliente> {
                           padding: MaterialStateProperty.all(
                               EdgeInsets.symmetric(vertical: 20))),
                       child: Text('Buscar'),
-                      onPressed: montaTela,
+                      onPressed: (){
+                        setState(() {
+                          montaTela();
+                        });
+                      },
                     ),
                   ),
                 ],
