@@ -16,32 +16,6 @@ Future<Cliente> fetchDados(String cnpj) async {
   }
 }
 
-Widget montaRestoTela(String cnpj) {
-  if (cnpj.isEmpty){
-    return Text('');
-  } else {
-    return FutureBuilder<Cliente>(
-      future: fetchDados(cnpj),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Center(
-            child: Text(
-              snapshot.data!.razao,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-              ),
-            ),
-          );
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
-        }
-        return const CircularProgressIndicator();
-      },
-    );
-  }
-}
-
 class NovoCliente extends StatefulWidget {
   NovoCliente({Key? key}) : super(key: key);
 
@@ -255,9 +229,14 @@ class _NovoClienteState extends State<NovoCliente> {
                     child: ElevatedButton(
                       style: ButtonStyle(
                           padding: MaterialStateProperty.all(
-                              EdgeInsets.symmetric(vertical: 20))),
-                      child: Text('Buscar'),
-                      onPressed: (){
+                              EdgeInsets.symmetric(vertical: 18))),
+                      child: Text(
+                        'Buscar',
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                      onPressed: () {
                         setState(() {
                           montaTela();
                         });
@@ -266,7 +245,9 @@ class _NovoClienteState extends State<NovoCliente> {
                   ),
                 ],
               ),
-              SizedBox(height: 8,),
+              SizedBox(
+                height: 8,
+              ),
               montaRestoTela(cnpjController.text),
             ],
           ),
@@ -335,5 +316,121 @@ class _NovoClienteState extends State<NovoCliente> {
         ],
       ),
     );
+  }
+
+  Widget montaRestoTela(String cnpj) {
+    if (cnpj.isEmpty) {
+      return Text('');
+    } else {
+      return FutureBuilder<Cliente>(
+        future: fetchDados(cnpj),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Column(
+              children: [
+                SizedBox(
+                  height: 8,
+                ),
+                TextFormField(
+                  initialValue: snapshot.data!.razao,
+                  enabled: false,
+                  decoration: InputDecoration(
+                    label: Text('Razão Social'),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  initialValue: snapshot.data!.fantasia,
+                  decoration: InputDecoration(
+                    label: Text('Fantasia'),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: TextFormField(
+                        initialValue: snapshot.data!.cep,
+                        enabled: false,
+                        decoration: InputDecoration(
+                          label: Text('CEP'),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Expanded(
+                      flex: 6,
+                      child: TextFormField(
+                        initialValue: snapshot.data!.bairro,
+                        enabled: false,
+                        decoration: InputDecoration(
+                          label: Text('Bairro'),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 8,
+                      child: TextFormField(
+                        initialValue: snapshot.data!.rua,
+                        enabled: false,
+                        decoration: InputDecoration(
+                          label: Text('Rua'),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 8,),
+                    Expanded(
+                      flex: 2,
+                      child: TextFormField(
+                        initialValue: snapshot.data!.numero,
+                        enabled: false,
+                        decoration: InputDecoration(
+                          label: Text('Nº'),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          } else if (snapshot.hasError) {
+            return Text('${snapshot.error}');
+          }
+          return const CircularProgressIndicator();
+        },
+      );
+    }
   }
 }
