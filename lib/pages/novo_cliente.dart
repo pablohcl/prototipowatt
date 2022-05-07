@@ -493,6 +493,21 @@ class _NovoClienteState extends State<NovoCliente> {
                     ),
                   ),
                 ),
+                SizedBox(height: 10,),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: (){},
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          child: Text('Salvar', style: TextStyle(fontSize: 18),),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10,),
               ],
             );
           } else if (snapshot.hasError) {

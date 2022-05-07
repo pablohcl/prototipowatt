@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Divider(),
+            SizedBox(height: 20,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
