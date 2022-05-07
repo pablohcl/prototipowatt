@@ -407,7 +407,9 @@ class _NovoClienteState extends State<NovoCliente> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 8,),
+                    SizedBox(
+                      width: 8,
+                    ),
                     Expanded(
                       flex: 2,
                       child: TextFormField(
@@ -422,6 +424,74 @@ class _NovoClienteState extends State<NovoCliente> {
                       ),
                     ),
                   ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 8,
+                      child: TextFormField(
+                        initialValue: snapshot.data!.cidade,
+                        enabled: false,
+                        decoration: InputDecoration(
+                          label: Text('Município'),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: TextFormField(
+                        initialValue: snapshot.data!.uf,
+                        enabled: false,
+                        decoration: InputDecoration(
+                          label: Text('UF'),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  initialValue: snapshot.data!.email,
+                  decoration: InputDecoration(
+                    label: Text('E-mail'),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10,),
+                TextFormField(
+                  initialValue: snapshot.data!.fone1,
+                  decoration: InputDecoration(
+                    label: Text('Telefone 1'),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10,),
+                TextFormField(
+                  initialValue: snapshot.data!.fone2,
+                  decoration: InputDecoration(
+                    label: Text('Telefone 2'),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
                 ),
               ],
             );
