@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'pages/novo_cliente.dart';
 import 'pages/novo_pedido.dart';
 
+enum Menu { itemOne, itemTwo, itemThree, itemFour }
+
 void main() {
   runApp(const MyApp());
 }
@@ -45,9 +47,15 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(
           actions: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.refresh),
+            Icon(Icons.refresh),
+            PopupMenuButton<Menu>(
+              itemBuilder: (context) =>
+              <PopupMenuEntry<Menu>>[
+                const PopupMenuItem<Menu>(
+                  child: Text('Consultar preços'),
+                  value: Menu.itemOne,
+                ),
+              ],
             ),
           ],
           centerTitle: true,
@@ -65,7 +73,8 @@ class _HomePageState extends State<HomePage> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => NovoCliente()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => NovoCliente()));
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -89,7 +98,8 @@ class _HomePageState extends State<HomePage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => NovoPedido()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => NovoPedido()));
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
