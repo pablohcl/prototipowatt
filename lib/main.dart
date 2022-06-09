@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'pages/novo_cliente.dart';
 import 'pages/novo_pedido.dart';
+import 'pages/consulta_preco.dart';
 
 enum Menu { itemOne, itemTwo, itemThree, itemFour }
 
@@ -47,11 +48,18 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(
           actions: [
-            Icon(Icons.refresh),
+            IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () {},
+            ),
             PopupMenuButton<Menu>(
-              itemBuilder: (context) =>
-              <PopupMenuEntry<Menu>>[
-                const PopupMenuItem<Menu>(
+              onSelected: (value) {
+                setState(() {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ConsultaPreco()));
+                });
+              },
+              itemBuilder: (context) => <PopupMenuEntry<Menu>>[
+                PopupMenuItem<Menu>(
                   child: Text('Consultar preços'),
                   value: Menu.itemOne,
                 ),
@@ -67,7 +75,9 @@ class _HomePageState extends State<HomePage> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
