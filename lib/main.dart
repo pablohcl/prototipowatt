@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'pages/novo_cliente.dart';
 import 'pages/novo_pedido.dart';
 import 'pages/consulta_preco.dart';
+import 'pages/atualizar.dart';
 
 enum Menu { itemOne, itemTwo, itemThree, itemFour }
 
@@ -50,7 +51,9 @@ class _HomePageState extends State<HomePage> {
           actions: [
             IconButton(
               icon: Icon(Icons.refresh),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Atualizar()));
+              },
             ),
             PopupMenuButton<Menu>(
               onSelected: (value) {
