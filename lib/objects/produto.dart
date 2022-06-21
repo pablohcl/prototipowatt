@@ -1,3 +1,8 @@
+final String idColumn = "id";
+String descColumn = "descricao";
+String undColumn = "undMedida";
+String grupoColumn = "grupo";
+
 class Produto {
   final int id;
   final String descricao;
@@ -13,19 +18,19 @@ class Produto {
 
   factory Produto.fromTxt(Map<String, dynamic> txt) {
     return Produto(
-      id: txt['id'] as int,
-      descricao: txt['descricao'] as String,
-      undMedida: txt['undMedida'] as String,
-      grupo: txt['grupo'] as String,
+      id: txt[idColumn] as int,
+      descricao: txt[descColumn] as String,
+      undMedida: txt[undColumn] as String,
+      grupo: txt[grupoColumn] as String,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id' : id,
-      'descricao' : descricao,
-      'undMedida' : undMedida,
-      'grupo' : grupo,
+      idColumn : id,
+      descColumn : descricao,
+      undColumn : undMedida,
+      grupoColumn : grupo,
     };
   }
 
