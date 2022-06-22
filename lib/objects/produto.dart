@@ -24,6 +24,14 @@ class Produto {
       grupo: txt[grupoColumn] as String,
     );
   }
+  factory Produto.fromMap(Map<dynamic, dynamic> txt) {
+    return Produto(
+      id: txt[idColumn] as int,
+      descricao: txt[descColumn] as String,
+      undMedida: txt[undColumn] as String,
+      grupo: txt[grupoColumn] as String,
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
