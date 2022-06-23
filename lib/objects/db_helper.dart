@@ -51,7 +51,7 @@ class DbHelper {
     if(maps.length > 0){
       return Produto.fromMap(maps.first);
     } else {
-      return new Produto(id: 0, descricao: "null", undMedida: "null", grupo: "null");
+      return new Produto(id: 0, descricao: "null", undMedida: "null", grupo: 0);
     }
   }
 

@@ -19,13 +19,13 @@ Future<Produto> fetchDados() async {
         CsvToListConverter().convert(response.body);
     final linha = rowsAsListOfValues[1].toString().split(';');
     Map<String, dynamic> map = {
-      'id': int.parse(linha[0]), // ESTÁ RETORNANDO "[4"
+      'id' : int.parse(linha[0].substring(1)),
       'descricao': linha[1],
       'undMedida': linha[2],
-      'grupo': linha[3],
+      'grupo': int.parse(linha[3].substring(0, linha[3].length -1)),
     };
 
-
+    // PAREI AQUI ##################################################
 
     return Produto.fromTxt(map);
   } else {
@@ -55,7 +55,7 @@ class _AtualizarState extends State<Atualizar> {
             future: futureList,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return Text(snapshot.data!.descricao.toString());
+                return Text(snapshot.data!.grupo.toString());
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
               }

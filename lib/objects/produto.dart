@@ -7,7 +7,7 @@ class Produto {
   final int id;
   final String descricao;
   final String undMedida;
-  final String grupo;
+  final int grupo;
 
   const Produto({
     required this.id,
@@ -21,7 +21,7 @@ class Produto {
       id: txt[idColumn] as int,
       descricao: txt[descColumn] as String,
       undMedida: txt[undColumn] as String,
-      grupo: txt[grupoColumn] as String,
+      grupo: txt[grupoColumn] as int,
     );
   }
   factory Produto.fromMap(Map<dynamic, dynamic> txt) {
@@ -29,7 +29,7 @@ class Produto {
       id: txt[idColumn] as int,
       descricao: txt[descColumn] as String,
       undMedida: txt[undColumn] as String,
-      grupo: txt[grupoColumn] as String,
+      grupo: txt[grupoColumn] as int,
     );
   }
 
