@@ -11,9 +11,9 @@ class DbHelper {
 
   DbHelper.internal();
 
-  late Database _db;
+  static Database? _db;
 
-  Future<Database> get db async {
+  Future<Database?> get db async {
     if (_db != null) {
       return _db;
     } else {
@@ -29,26 +29,26 @@ class DbHelper {
     return await openDatabase(path, version: 1,
         onCreate: (Database db, int newerVersion) async {
       await db.execute(
-          "CREATE TABLE $tabelaProduto($idColumn INT PRIMARY KEY, $descColumn TEXT, $undColumn TEXT, $grupoColumn TEXT,)");
+          "CREATE TABLE $tabelaProduto($idColumn INT PRIMARY KEY, $descColumn TEXT, $undColumn TEXT, $grupoColumn INT)");
     });
   }
 
   Future<Produto> saveProduto(Produto produto) async {
-    Database dbProd = await db;
-    await dbProd.insert(tabelaProduto, produto.toMap());
+    Database? dbProd = await db;
+    await dbProd!.insert(tabelaProduto, produto.toMap());
     return produto;
   }
 
   Future<Produto> getProduto(int id) async {
-    Database dbProd = await db;
-    List<Map> maps = await dbProd.query(
+    Database? dbProd = await db;
+    List<Map> maps = await dbProd!.query(
       tabelaProduto,
       columns: [idColumn, descColumn, undColumn, grupoColumn],
       where: "$idColumn = ?",
       whereArgs: [id],
     );
 
-    if(maps.length > 0){
+    if (maps.length > 0) {
       return Produto.fromMap(maps.first);
     } else {
       return new Produto(id: 0, descricao: "null", undMedida: "null", grupo: 0);
@@ -56,32 +56,39 @@ class DbHelper {
   }
 
   Future<int> deleteProduto(int id) async {
-    Database dbProd = await db;
-    return await dbProd.delete(tabelaProduto, where: "$idColumn = ?", whereArgs: [id]);
+    Database? dbProd = await db;
+    return await dbProd!
+        .delete(tabelaProduto, where: "$idColumn = ?", whereArgs: [id]);
   }
 
   Future<int> updateProduto(Produto produto) async {
-    Database dbProd = await db;
-    return await dbProd.update(tabelaProduto, produto.toMap(), where: "$idColumn = ?", whereArgs: [produto.id]);
+    Database? dbProd = await db;
+    return await dbProd!.update(tabelaProduto, produto.toMap(),
+        where: "$idColumn = ?", whereArgs: [produto.id]);
   }
 
   Future<List> getTodosProdutos() async {
-    Database dbProd = await db;
-    List listMap  = await dbProd.rawQuery("SELECT * FROM $tabelaProduto");
-    List<Produto> listProd = List.empty();
-    for(Map m in listMap){
-      listProd.add(Produto.fromMap(m));
-    }
+    Database? dbProd = await db;
+    List listMap = await dbProd!.rawQuery("SELECT * FROM $tabelaProduto");
+    List<Produto> listProd = List.generate(
+      listMap.length,
+      (index) {
+        return Produto.fromMap(listMap[index]);
+      },
+      growable: false,
+    );
+
     return listProd;
   }
 
   Future<int> getNumber() async {
-    Database dbProd = await db;
-    return Sqflite.firstIntValue(await dbProd.rawQuery("SELECT COUNT(*) FROM $tabelaProduto"));
+    Database? dbProd = await db;
+    return Sqflite.firstIntValue(
+        await dbProd!.rawQuery("SELECT COUNT(*) FROM $tabelaProduto"));
   }
 
   close() async {
-    Database dbProd = await db;
-    dbProd.close();
+    Database? dbProd = await db;
+    dbProd!.close();
   }
 }
