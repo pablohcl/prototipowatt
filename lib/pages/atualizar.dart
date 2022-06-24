@@ -22,7 +22,7 @@ class Atualizar extends StatefulWidget {
 
 class _AtualizarState extends State<Atualizar> {
 
-  late Future<Produto> futureList;
+  late Future<List<dynamic>> futureList;
   DbHelper helper = DbHelper();
 
   @override
@@ -33,11 +33,11 @@ class _AtualizarState extends State<Atualizar> {
           title: Text("Atualizando"),
         ),
         body: Center(
-          child: FutureBuilder<Produto>(
+          child: FutureBuilder<List<dynamic>>(
             future: futureList,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return Text(snapshot.data!.grupo.toString());
+                return Text(snapshot.data!.toString());
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
               }
@@ -55,28 +55,19 @@ class _AtualizarState extends State<Atualizar> {
   void initState() {
     super.initState();
     futureList = fetchDados();
-    helper.getTodosProdutos().then((list) => print(list));
+    helper.getTodosProdutos().then((list) => print(list.length));
   }
 
-  Future<Produto> fetchDados() async {
+  Future<List<dynamic>> fetchDados() async {
     final response = await http.get(Uri.parse(
         'https://pablohenriquecorrea.000webhostapp.com/mobile/t_a_pro.CSV'));
 
     if (response.statusCode == 200) {
-      List<List<dynamic>> rowsAsListOfValues =
-      CsvToListConverter().convert(response.body);
-      final linha = rowsAsListOfValues[1].toString().split(';');
-      Map<String, dynamic> map = {
-        'id' : int.parse(linha[0].substring(1)),
-        'descricao': linha[1],
-        'undMedida': linha[2],
-        'grupo': int.parse(linha[3].substring(0, linha[3].length -1)),
-      };
+      List<List<dynamic>> rowsAsListOfValues = CsvToListConverter().convert(response.body);
 
-      final pro = Produto.fromTxt(map);
-      //helper.saveProduto(pro);
+      helper.saveProdutos(rowsAsListOfValues);
 
-      return Produto.fromTxt(map);
+      return rowsAsListOfValues;
     } else {
       throw Exception('Falha ao carregar dados');
     }

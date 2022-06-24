@@ -33,10 +33,31 @@ class DbHelper {
     });
   }
 
-  Future<Produto> saveProduto(Produto produto) async {
+  Future<List<dynamic>> saveProdutos(List<List<dynamic>> listProds) async {
     Database? dbProd = await db;
-    await dbProd!.insert(tabelaProduto, produto.toMap());
-    return produto;
+    var batch = dbProd!.batch();
+
+    for(int i = 1; i < listProds.length; i++){
+      final linha = listProds[i].toString().split(';');
+      Map<String, dynamic> map = {
+        'id' : int.parse(linha[0].substring(1)),
+        'descricao': linha[1],
+        'undMedida': linha[2],
+        'grupo': int.parse(linha[3].substring(0, linha[3].length -1)),
+      };
+
+      final Produto prod = await getProduto(map['id']);
+      if(prod.id == 0){
+        batch.insert(tabelaProduto, map);
+      } else if(prod.id == map['id']){
+        batch.update(tabelaProduto, map,
+            where: "$idColumn = ?", whereArgs: [map['id']]);
+      } else {
+        print('ITEM NAO FOI INSERIDO NEM ATUALIZADO');
+      }
+    }
+
+    return await batch.commit();
   }
 
   Future<Produto> getProduto(int id) async {
@@ -61,12 +82,6 @@ class DbHelper {
         .delete(tabelaProduto, where: "$idColumn = ?", whereArgs: [id]);
   }
 
-  Future<int> updateProduto(Produto produto) async {
-    Database? dbProd = await db;
-    return await dbProd!.update(tabelaProduto, produto.toMap(),
-        where: "$idColumn = ?", whereArgs: [produto.id]);
-  }
-
   Future<List> getTodosProdutos() async {
     Database? dbProd = await db;
     List listMap = await dbProd!.rawQuery("SELECT * FROM $tabelaProduto");
@@ -85,6 +100,11 @@ class DbHelper {
     Database? dbProd = await db;
     return Sqflite.firstIntValue(
         await dbProd!.rawQuery("SELECT COUNT(*) FROM $tabelaProduto"));
+  }
+
+  deleteTable (String table) async {
+    Database? dbProd = await db;
+    return await dbProd!.rawQuery("sql");
   }
 
   close() async {
