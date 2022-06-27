@@ -29,7 +29,7 @@ class DbHelper {
     return await openDatabase(path, version: 1,
         onCreate: (Database db, int newerVersion) async {
       await db.execute(
-          "CREATE TABLE $tabelaProduto($idColumn INT PRIMARY KEY, $descColumn TEXT, $undColumn TEXT, $grupoColumn INT)");
+          "CREATE TABLE $tabelaProduto($idColumn INT PRIMARY KEY, $descColumn TEXT, $undColumn TEXT, $grupoColumn INT, $vCompraColumn DOUBLE, $vMinColumn DOUBLE, $vProdColumn DOUBLE, $vSugColumn DOUBLE)");
     });
   }
 
@@ -40,10 +40,14 @@ class DbHelper {
     for(int i = 1; i < listProds.length; i++){
       final linha = listProds[i].toString().split(';');
       Map<String, dynamic> map = {
-        'id' : int.parse(linha[0].substring(1)),
-        'descricao': linha[1],
-        'undMedida': linha[2],
-        'grupo': int.parse(linha[3].substring(0, linha[3].length -1)),
+        idColumn : int.parse(linha[0].substring(1)),
+        descColumn: linha[1],
+        undColumn: linha[2],
+        grupoColumn: int.parse(linha[3]),
+        vCompraColumn: double.parse(linha[4]),
+        vMinColumn: double.parse(linha[5]),
+        vProdColumn: double.parse(linha[6]),
+        vSugColumn: double.parse(linha[7].substring(0, linha[7].length -1)),
       };
 
       final Produto prod = await getProduto(map['id']);
@@ -64,7 +68,7 @@ class DbHelper {
     Database? dbProd = await db;
     List<Map> maps = await dbProd!.query(
       tabelaProduto,
-      columns: [idColumn, descColumn, undColumn, grupoColumn],
+      columns: [idColumn, descColumn, undColumn, grupoColumn, vCompraColumn, vMinColumn, vProdColumn, vSugColumn],
       where: "$idColumn = ?",
       whereArgs: [id],
     );
@@ -72,7 +76,7 @@ class DbHelper {
     if (maps.length > 0) {
       return Produto.fromMap(maps.first);
     } else {
-      return new Produto(id: 0, descricao: "null", undMedida: "null", grupo: 0);
+      return new Produto(id: 0, descricao: "null", undMedida: "null", grupo: 0, valorCompra: 0, valorMin: 0, valorProd: 0, valorSugerido: 0);
     }
   }
 

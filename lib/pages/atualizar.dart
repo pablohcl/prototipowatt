@@ -22,7 +22,7 @@ class Atualizar extends StatefulWidget {
 
 class _AtualizarState extends State<Atualizar> {
 
-  late Future<List<dynamic>> futureList;
+  late Future<List<dynamic>> futureProdList;
   DbHelper helper = DbHelper();
 
   @override
@@ -34,7 +34,7 @@ class _AtualizarState extends State<Atualizar> {
         ),
         body: Center(
           child: FutureBuilder<List<dynamic>>(
-            future: futureList,
+            future: futureProdList,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Text(snapshot.data!.toString());
@@ -54,18 +54,27 @@ class _AtualizarState extends State<Atualizar> {
   @override
   void initState() {
     super.initState();
-    futureList = fetchDados();
-    helper.getTodosProdutos().then((list) => print(list.length));
+    futureProdList = fetchProdutos();
   }
 
-  Future<List<dynamic>> fetchDados() async {
+  // ###### FALTA ACRESCENTAR OS CAMPOS DOS VALORES NA TABELA DE PRODUTOS
+
+  @override
+  void dispose() {
+    super.dispose();
+    helper.close();
+  }
+
+  Future<List<dynamic>> fetchProdutos() async {
     final response = await http.get(Uri.parse(
         'https://pablohenriquecorrea.000webhostapp.com/mobile/t_a_pro.CSV'));
 
     if (response.statusCode == 200) {
       List<List<dynamic>> rowsAsListOfValues = CsvToListConverter().convert(response.body);
 
-      helper.saveProdutos(rowsAsListOfValues);
+      await helper.saveProdutos(rowsAsListOfValues);
+      Future<List> l = helper.getTodosProdutos();
+      l.then((value) => print(value.length));
 
       return rowsAsListOfValues;
     } else {
