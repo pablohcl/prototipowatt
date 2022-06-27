@@ -29,7 +29,7 @@ class DbHelper {
     return await openDatabase(path, version: 1,
         onCreate: (Database db, int newerVersion) async {
       await db.execute(
-          "CREATE TABLE $tabelaProduto($idColumn INT PRIMARY KEY, $descColumn TEXT, $undColumn TEXT, $grupoColumn INT, $vCompraColumn DOUBLE, $vMinColumn DOUBLE, $vProdColumn DOUBLE, $vSugColumn DOUBLE)");
+          "CREATE TABLE $tabelaProduto($idColumn INT PRIMARY KEY, $descColumn TEXT, $undColumn TEXT, $grupoColumn INT, $vCompraColumn FLOAT, $vMinColumn FLOAT, $vProdColumn FLOAT, $vSugColumn FLOAT)");
     });
   }
 
@@ -44,10 +44,11 @@ class DbHelper {
         descColumn: linha[1],
         undColumn: linha[2],
         grupoColumn: int.parse(linha[3]),
-        vCompraColumn: double.parse(linha[4]),
-        vMinColumn: double.parse(linha[5]),
-        vProdColumn: double.parse(linha[6]),
-        vSugColumn: double.parse(linha[7].substring(0, linha[7].length -1)),
+        //vCompraColumn: double.parse(linha[4].replaceAll(",", ".")),
+        vCompraColumn: linha[4].replaceAll(",", "."),
+        vMinColumn: linha[5].replaceAll(",", "."),
+        vProdColumn: linha[6].replaceAll(",", "."),
+        vSugColumn: linha[7].substring(0, linha[7].length -1).replaceAll(",", "."),
       };
 
       final Produto prod = await getProduto(map['id']);
@@ -89,15 +90,15 @@ class DbHelper {
   Future<List> getTodosProdutos() async {
     Database? dbProd = await db;
     List listMap = await dbProd!.rawQuery("SELECT * FROM $tabelaProduto");
-    List<Produto> listProd = List.generate(
+    /*List<Produto> listProd = List.generate(
       listMap.length,
       (index) {
         return Produto.fromMap(listMap[index]);
       },
       growable: false,
-    );
+    );*/
 
-    return listProd;
+    return listMap;
   }
 
   Future<int> getNumber() async {
