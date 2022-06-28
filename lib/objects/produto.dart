@@ -46,10 +46,10 @@ class Produto {
       descricao: txt[descColumn] as String,
       undMedida: txt[undColumn] as String,
       grupo: txt[grupoColumn] as int,
-      valorCompra: txt[vCompraColumn] as double,
-      valorMin: txt[vMinColumn] as double,
-      valorProd: txt[vProdColumn] as double,
-      valorSugerido: txt[vSugColumn] as double,
+      valorCompra: txt[vCompraColumn].toString().replaceAll(" ", "") as double, // aqui esta o problema
+      valorMin: txt[vMinColumn].toString().replaceAll(" ", "") as double,
+      valorProd: txt[vProdColumn].toString().replaceAll(" ", "") as double,
+      valorSugerido: txt[vSugColumn].toString().replaceAll(" ", "") as double,
     );
   }
 

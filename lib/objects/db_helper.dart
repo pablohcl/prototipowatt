@@ -53,13 +53,13 @@ class DbHelper {
         vSugColumn: linha[7].substring(0, linha[7].length -1).replaceAll(",", "."),
       };
       print("MEIO DO FOR #####################################");
-      final Produto prod = await getProduto(map['id']); // O ERRO ESTÁ AQUI
+      final Produto prod = await getProduto(map[idColumn]); // O ERRO ESTÁ AQUI
       print("PRODUTO PÊGO #####################################");
       if(prod.id == 0){
         batch.insert(tabelaProduto, map);
-      } else if(prod.id == map['id']){
+      } else if(prod.id == map[idColumn]){
         batch.update(tabelaProduto, map,
-            where: "$idColumn = ?", whereArgs: [map['id']]);
+            where: "$idColumn = ?", whereArgs: [map[idColumn]]);
       } else {
         print('ITEM NAO FOI INSERIDO NEM ATUALIZADO');
       }
@@ -70,6 +70,7 @@ class DbHelper {
 
   Future<Produto> getProduto(int id) async {
     Database? dbProd = await db;
+    print("INICIO DO GET PRODUTO ######################");
     List<Map> maps = await dbProd!.query(
       tabelaProduto,
       columns: [idColumn, descColumn, undColumn, grupoColumn, vCompraColumn, vMinColumn, vProdColumn, vSugColumn],
@@ -77,7 +78,8 @@ class DbHelper {
       whereArgs: [id],
     );
 
-    if (maps.length > 0) {
+    if (maps.isNotEmpty) {
+      print(maps.toString());
       return Produto.fromMap(maps.first);
     } else {
       return new Produto(id: 0, descricao: "null", undMedida: "null", grupo: 0, valorCompra: 0, valorMin: 0, valorProd: 0, valorSugerido: 0);
