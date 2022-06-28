@@ -62,7 +62,7 @@ class _AtualizarState extends State<Atualizar> {
   @override
   void dispose() {
     super.dispose();
-    helper.close();
+    //helper.close();
   }
 
   Future<List<dynamic>> fetchProdutos() async {
@@ -70,7 +70,7 @@ class _AtualizarState extends State<Atualizar> {
         'https://pablohenriquecorrea.000webhostapp.com/mobile/t_a_pro.CSV'));
 
     if (response.statusCode == 200) {
-      List<List<dynamic>> rowsAsListOfValues = CsvToListConverter().convert(response.body);
+      final List<List<dynamic>> rowsAsListOfValues = CsvToListConverter().convert(response.body);
 
       await helper.saveProdutos(rowsAsListOfValues);
       Future<List> l = helper.getTodosProdutos();

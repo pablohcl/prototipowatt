@@ -34,24 +34,27 @@ class DbHelper {
   }
 
   Future<List<dynamic>> saveProdutos(List<List<dynamic>> listProds) async {
+    print("INICIO DO saveProdutos() #####################################");
     Database? dbProd = await db;
+    print("PEGOU O BANCO #####################################");
     var batch = dbProd!.batch();
-
+    print("CRIOU O BATCH #####################################");
     for(int i = 1; i < listProds.length; i++){
+      print("INICIO DO FOR #####################################");
       final linha = listProds[i].toString().split(';');
-      Map<String, dynamic> map = {
+      final Map<String, dynamic> map = {
         idColumn : int.parse(linha[0].substring(1)),
         descColumn: linha[1],
         undColumn: linha[2],
         grupoColumn: int.parse(linha[3]),
-        //vCompraColumn: double.parse(linha[4].replaceAll(",", ".")),
         vCompraColumn: linha[4].replaceAll(",", "."),
         vMinColumn: linha[5].replaceAll(",", "."),
         vProdColumn: linha[6].replaceAll(",", "."),
         vSugColumn: linha[7].substring(0, linha[7].length -1).replaceAll(",", "."),
       };
-
-      final Produto prod = await getProduto(map['id']);
+      print("MEIO DO FOR #####################################");
+      final Produto prod = await getProduto(map['id']); // O ERRO ESTÁ AQUI
+      print("PRODUTO PÊGO #####################################");
       if(prod.id == 0){
         batch.insert(tabelaProduto, map);
       } else if(prod.id == map['id']){
