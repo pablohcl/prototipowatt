@@ -37,7 +37,7 @@ class _AtualizarState extends State<Atualizar> {
             future: futureProdList,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return Text(snapshot.data!.toString());
+                return Text(snapshot.data!.length.toString() + " Produtos atualizados!");
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
               }
@@ -55,14 +55,6 @@ class _AtualizarState extends State<Atualizar> {
   void initState() {
     super.initState();
     futureProdList = fetchProdutos();
-  }
-
-  // ###### FALTA ACRESCENTAR OS CAMPOS DOS VALORES NA TABELA DE PRODUTOS
-
-  @override
-  void dispose() {
-    super.dispose();
-    //helper.close();
   }
 
   Future<List<dynamic>> fetchProdutos() async {

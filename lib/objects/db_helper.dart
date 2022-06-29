@@ -29,32 +29,27 @@ class DbHelper {
     return await openDatabase(path, version: 1,
         onCreate: (Database db, int newerVersion) async {
       await db.execute(
-          "CREATE TABLE $tabelaProduto($idColumn INT PRIMARY KEY, $descColumn TEXT, $undColumn TEXT, $grupoColumn INT, $vCompraColumn FLOAT, $vMinColumn FLOAT, $vProdColumn FLOAT, $vSugColumn FLOAT)");
+          "CREATE TABLE $tabelaProduto($idColumn INT PRIMARY KEY, $descColumn TEXT, $undColumn TEXT, $grupoColumn INT, $vCompraColumn DECIMAL, $vMinColumn DECIMAL, $vProdColumn DECIMAL, $vSugColumn DECIMAL)");
     });
   }
 
   Future<List<dynamic>> saveProdutos(List<List<dynamic>> listProds) async {
-    print("INICIO DO saveProdutos() #####################################");
     Database? dbProd = await db;
-    print("PEGOU O BANCO #####################################");
     var batch = dbProd!.batch();
-    print("CRIOU O BATCH #####################################");
     for(int i = 1; i < listProds.length; i++){
-      print("INICIO DO FOR #####################################");
       final linha = listProds[i].toString().split(';');
       final Map<String, dynamic> map = {
         idColumn : int.parse(linha[0].substring(1)),
         descColumn: linha[1],
         undColumn: linha[2],
         grupoColumn: int.parse(linha[3]),
-        vCompraColumn: linha[4].replaceAll(",", "."),
-        vMinColumn: linha[5].replaceAll(",", "."),
-        vProdColumn: linha[6].replaceAll(",", "."),
-        vSugColumn: linha[7].substring(0, linha[7].length -1).replaceAll(",", "."),
+        vCompraColumn: linha[4].replaceAll(",", ".").replaceAll(" ", ""),
+        vMinColumn: linha[5].replaceAll(",", ".").replaceAll(" ", ""),
+        vProdColumn: linha[6].replaceAll(",", ".").replaceAll(" ", ""),
+        vSugColumn: linha[7].substring(0, linha[7].length -1).replaceAll(",", ".").replaceAll(" ", ""),
       };
-      print("MEIO DO FOR #####################################");
-      final Produto prod = await getProduto(map[idColumn]); // O ERRO ESTÁ AQUI
-      print("PRODUTO PÊGO #####################################");
+      print(map[vCompraColumn]);
+      final Produto prod = await getProduto(map[idColumn]);
       if(prod.id == 0){
         batch.insert(tabelaProduto, map);
       } else if(prod.id == map[idColumn]){
@@ -70,12 +65,15 @@ class DbHelper {
 
   Future<Produto> getProduto(int id) async {
     Database? dbProd = await db;
-    print("INICIO DO GET PRODUTO ######################");
-    List<Map> maps = await dbProd!.query(
+    /*List<Map> maps = await dbProd!.query(
       tabelaProduto,
       columns: [idColumn, descColumn, undColumn, grupoColumn, vCompraColumn, vMinColumn, vProdColumn, vSugColumn],
       where: "$idColumn = ?",
       whereArgs: [id],
+    );*/
+
+    List<Map> maps = await dbProd!.rawQuery(
+      "SELECT * FROM $tabelaProduto WHERE $idColumn = $id"
     );
 
     if (maps.isNotEmpty) {

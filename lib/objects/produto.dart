@@ -12,10 +12,10 @@ class Produto {
   final String descricao;
   final String undMedida;
   final int grupo;
-  final double valorCompra;
-  final double valorMin;
-  final double valorProd;
-  final double valorSugerido;
+  final num valorCompra;
+  final num valorMin;
+  final num valorProd;
+  final num valorSugerido;
 
   const Produto({
     required this.id,
@@ -34,10 +34,10 @@ class Produto {
       descricao: txt[descColumn] as String,
       undMedida: txt[undColumn] as String,
       grupo: txt[grupoColumn] as int,
-      valorCompra: txt[vCompraColumn] as double,
-      valorMin: txt[vMinColumn] as double,
-      valorProd: txt[vProdColumn] as double,
-      valorSugerido: txt[vSugColumn] as double,
+      valorCompra: txt[vCompraColumn] as num,
+      valorMin: txt[vMinColumn] as num,
+      valorProd: txt[vProdColumn] as num,
+      valorSugerido: txt[vSugColumn] as num,
     );
   }
   factory Produto.fromMap(Map<dynamic, dynamic> txt) {
@@ -46,10 +46,10 @@ class Produto {
       descricao: txt[descColumn] as String,
       undMedida: txt[undColumn] as String,
       grupo: txt[grupoColumn] as int,
-      valorCompra: txt[vCompraColumn].toString().replaceAll(" ", "") as double, // aqui esta o problema
-      valorMin: txt[vMinColumn].toString().replaceAll(" ", "") as double,
-      valorProd: txt[vProdColumn].toString().replaceAll(" ", "") as double,
-      valorSugerido: txt[vSugColumn].toString().replaceAll(" ", "") as double,
+      valorCompra: txt[vCompraColumn] as num, // aqui esta o problema
+      valorMin: txt[vMinColumn] as num,
+      valorProd: txt[vProdColumn] as num,
+      valorSugerido: txt[vSugColumn] as num,
     );
   }
 

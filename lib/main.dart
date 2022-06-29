@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'objects/db_helper.dart';
 import 'pages/novo_cliente.dart';
 import 'pages/novo_pedido.dart';
 import 'pages/consulta_preco.dart';
@@ -43,6 +44,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  DbHelper helper = DbHelper();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -919,5 +922,11 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    helper.close();
   }
 }
