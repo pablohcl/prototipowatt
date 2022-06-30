@@ -96,6 +96,7 @@ flutter:
   assets:
     - assets/icon/dots.svg
     - assets/icon/icon.png
+    - assets/icon/boxes.png
 
 flutter_icons:
   android: "launcher_icon"
