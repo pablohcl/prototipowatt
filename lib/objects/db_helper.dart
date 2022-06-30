@@ -90,18 +90,18 @@ class DbHelper {
         .delete(tabelaProduto, where: "$idColumn = ?", whereArgs: [id]);
   }
 
-  Future<List> getTodosProdutos() async {
+  Future<List<Produto>> getTodosProdutos() async {
     Database? dbProd = await db;
     List listMap = await dbProd!.rawQuery("SELECT * FROM $tabelaProduto");
-    /*List<Produto> listProd = List.generate(
+    List<Produto> listProd = List.generate(
       listMap.length,
       (index) {
         return Produto.fromMap(listMap[index]);
       },
-      growable: false,
-    );*/
+      growable: true,
+    );
 
-    return listMap;
+    return listProd;
   }
 
   Future<int> getNumber() async {

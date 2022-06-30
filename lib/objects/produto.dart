@@ -46,7 +46,7 @@ class Produto {
       descricao: txt[descColumn] as String,
       undMedida: txt[undColumn] as String,
       grupo: txt[grupoColumn] as int,
-      valorCompra: txt[vCompraColumn] as num, // aqui esta o problema
+      valorCompra: txt[vCompraColumn] as num,
       valorMin: txt[vMinColumn] as num,
       valorProd: txt[vProdColumn] as num,
       valorSugerido: txt[vSugColumn] as num,

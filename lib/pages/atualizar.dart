@@ -65,7 +65,7 @@ class _AtualizarState extends State<Atualizar> {
       final List<List<dynamic>> rowsAsListOfValues = CsvToListConverter().convert(response.body);
 
       await helper.saveProdutos(rowsAsListOfValues);
-      Future<List> l = helper.getTodosProdutos();
+      Future<List<Produto>> l = helper.getTodosProdutos();
       l.then((value) => print(value.length));
 
       return rowsAsListOfValues;

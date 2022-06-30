@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../objects/db_helper.dart';
+import '../objects/produto.dart';
 
 class ConsultaPreco extends StatefulWidget {
   const ConsultaPreco({Key? key}) : super(key: key);
@@ -11,10 +13,14 @@ class ConsultaPreco extends StatefulWidget {
 
 class _ConsultaPrecoState extends State<ConsultaPreco> {
   DbHelper helper = DbHelper();
+  late Future<List<Produto>> futureProdutos;
+  late List<Produto>? produtos;
 
   @override
   void initState() {
     super.initState();
+
+    futureProdutos = helper.getTodosProdutos();
   }
 
   @override
@@ -72,9 +78,34 @@ class _ConsultaPrecoState extends State<ConsultaPreco> {
               height: 12,
             ),
             // IMPLEMENTAR ListView.builder() ##########
+            FutureBuilder<List<Produto>>(
+              future: futureProdutos,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  produtos = snapshot.data;
+                  return Expanded(
+                    child: preencheListView(produtos!),
+                  );
+                } else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
+
+                // By default, show a loading spinner.
+                return const CircularProgressIndicator();
+              },
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  ListView preencheListView(List l) {
+    return ListView.builder(
+      itemCount: produtos!.length,
+      itemBuilder: (context, index) {
+        return _produtoCard(context, index);
+      },
     );
   }
 
@@ -86,19 +117,34 @@ class _ConsultaPrecoState extends State<ConsultaPreco> {
           child: Row(
             children: [
               Container(
-                width: 80,
-                height: 80,
+                width: 60,
+                height: 60,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage("assets/icon/boxes.png"),
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 10),
+              SizedBox(width: 10,),
+              Expanded(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Desenvolver o Future para ter a lista cm os produtos
+                    Text(
+                      produtos![index].descricao,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                    Text(
+                      produtos![index].undMedida,
+                      style: TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
                   ],
                 ),
               ),
