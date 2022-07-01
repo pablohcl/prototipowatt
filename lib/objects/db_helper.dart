@@ -106,8 +106,8 @@ class DbHelper {
 
   Future<List<Produto>> buscaProdutos(String textoDigitado) async {
     Database? dbProd = await db;
-    List listMap = await dbProd!.rawQuery("SELECT * FROM $tabelaProduto WHERE $descColumn = '$textoDigitado';");
-    print("SELECT * FROM $tabelaProduto WHERE $descColumn = '$textoDigitado';");
+    List listMap = await dbProd!.rawQuery("SELECT * FROM $tabelaProduto WHERE $descColumn LIKE '%$textoDigitado%'");
+    print("SELECT * FROM $tabelaProduto WHERE $descColumn LIKE '%$textoDigitado%'");
     print(listMap.length);
     return List.generate(
       listMap.length,

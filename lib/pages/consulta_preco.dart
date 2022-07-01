@@ -148,7 +148,7 @@ class _ConsultaPrecoState extends State<ConsultaPreco> {
                       maxLines: 1,
                     ),
                     Text(
-                      produtos![index].undMedida,
+                      produtos![index].id.toString(),
                       style: TextStyle(
                         fontSize: 14,
                       ),
