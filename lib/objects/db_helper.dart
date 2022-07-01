@@ -104,6 +104,20 @@ class DbHelper {
     return listProd;
   }
 
+  Future<List<Produto>> buscaProdutos(String textoDigitado) async {
+    Database? dbProd = await db;
+    List listMap = await dbProd!.rawQuery("SELECT * FROM $tabelaProduto WHERE $descColumn = '$textoDigitado';");
+    print("SELECT * FROM $tabelaProduto WHERE $descColumn = '$textoDigitado';");
+    print(listMap.length);
+    return List.generate(
+      listMap.length,
+          (index) {
+        return Produto.fromMap(listMap[index]);
+      },
+      growable: true,
+    );
+  }
+
   Future<int> getNumber() async {
     Database? dbProd = await db;
     return Sqflite.firstIntValue(

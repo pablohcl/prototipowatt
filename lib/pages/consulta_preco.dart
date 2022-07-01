@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../objects/db_helper.dart';
@@ -15,6 +14,7 @@ class _ConsultaPrecoState extends State<ConsultaPreco> {
   DbHelper helper = DbHelper();
   late Future<List<Produto>> futureProdutos;
   late List<Produto>? produtos;
+  TextEditingController buscaController = TextEditingController();
 
   @override
   void initState() {
@@ -43,6 +43,7 @@ class _ConsultaPrecoState extends State<ConsultaPreco> {
                 Expanded(
                   flex: 7,
                   child: TextField(
+                    controller: buscaController,
                     decoration: InputDecoration(
                       labelStyle: TextStyle(color: Colors.green),
                       border: OutlineInputBorder(
@@ -63,7 +64,14 @@ class _ConsultaPrecoState extends State<ConsultaPreco> {
                         fontSize: 18,
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      print("INICIO DO onPressed() ####################");
+                      print(buscaController.text);
+                      futureProdutos = helper.buscaProdutos(buscaController.text);
+                      setState(() {
+                        preencheListView();
+                      });
+                    },
                     style: ButtonStyle(
                         padding: MaterialStateProperty.all(
                             EdgeInsets.symmetric(vertical: 18))),
@@ -78,33 +86,33 @@ class _ConsultaPrecoState extends State<ConsultaPreco> {
               height: 12,
             ),
             // IMPLEMENTAR ListView.builder() ##########
-            FutureBuilder<List<Produto>>(
-              future: futureProdutos,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  produtos = snapshot.data;
-                  return Expanded(
-                    child: preencheListView(produtos!),
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
-                }
-
-                // By default, show a loading spinner.
-                return const CircularProgressIndicator();
-              },
-            ),
+            preencheListView(),
           ],
         ),
       ),
     );
   }
 
-  ListView preencheListView(List l) {
-    return ListView.builder(
-      itemCount: produtos!.length,
-      itemBuilder: (context, index) {
-        return _produtoCard(context, index);
+  FutureBuilder<List<Produto>> preencheListView() {
+    return FutureBuilder<List<Produto>>(
+      future: futureProdutos,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          produtos = snapshot.data;
+          return Expanded(
+            child: ListView.builder(
+              itemCount: produtos!.length,
+              itemBuilder: (context, index) {
+                return _produtoCard(context, index);
+              },
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+
+        // By default, show a loading spinner.
+        return const CircularProgressIndicator();
       },
     );
   }
