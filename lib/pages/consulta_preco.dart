@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prototipo/pages/view_produto.dart';
 
 import '../objects/db_helper.dart';
 import '../objects/produto.dart';
@@ -119,6 +120,9 @@ class _ConsultaPrecoState extends State<ConsultaPreco> {
 
   Widget _produtoCard(BuildContext context, int index) {
     return GestureDetector(
+      onTap: (){
+        Navigator.pushNamed(context, ViewProduto.routeName, arguments: index);
+      },
       child: Card(
         child: Padding(
           padding: EdgeInsets.all(10),

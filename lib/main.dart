@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prototipo/pages/view_produto.dart';
 import 'objects/db_helper.dart';
 import 'pages/novo_cliente.dart';
 import 'pages/novo_pedido.dart';
@@ -32,6 +33,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
       ),
       home: HomePage(),
+      routes: {
+        ViewProduto.routeName: (context) => const ViewProduto(),
+      },
     );
   }
 }
