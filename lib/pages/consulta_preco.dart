@@ -121,6 +121,7 @@ class _ConsultaPrecoState extends State<ConsultaPreco> {
   Widget _produtoCard(BuildContext context, int index) {
     return GestureDetector(
       onTap: (){
+        print(index.toString());
         Navigator.pushNamed(context, ViewProduto.routeName, arguments: index);
       },
       child: Card(
