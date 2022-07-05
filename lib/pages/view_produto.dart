@@ -13,22 +13,19 @@ class ViewProduto extends StatefulWidget {
 }
 
 class _ViewProdutoState extends State<ViewProduto> {
-
   late Future<Produto> futureProduto;
   DbHelper helper = DbHelper();
-  int? argsProduto;
+  Produto? argsProduto;
   late Produto? produto;
-  String appBarTitle = "Carregando...";
 
   @override
   Widget build(BuildContext context) {
-    argsProduto = ModalRoute
-        .of(context)!
-        .settings
-        .arguments as int;
+    argsProduto = ModalRoute.of(context)!.settings.arguments as Produto;
+    print(argsProduto);
+    futureProduto = pegaProduto();
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(title: Text(argsProduto!.id.toString()),),
         body: Column(
           children: [
             mostraProduto(),
@@ -41,11 +38,10 @@ class _ViewProdutoState extends State<ViewProduto> {
   @override
   void initState() {
     super.initState();
-    futureProduto = pegaProduto();
   }
 
   Future<Produto> pegaProduto() async {
-    return await helper.getProduto(argsProduto!);
+    return await helper.getProduto(argsProduto!.id);
   }
 
   FutureBuilder<Produto> mostraProduto() {
@@ -54,9 +50,6 @@ class _ViewProdutoState extends State<ViewProduto> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           produto = snapshot.data;
-          setState(() {
-            appBarTitle = produto!.descricao;
-          });
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -64,17 +57,65 @@ class _ViewProdutoState extends State<ViewProduto> {
                 Row(
                   children: [
                     Expanded(
-                      child: Text(produto!.id.toString()),
-                      flex: 2,
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    Expanded(
-                      child: Text(produto!.descricao),
+                      child: Text(
+                        produto!.descricao,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ],
                 ),
+                Divider(),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 4,
+                      child: Text(
+                        "Mínimo: R\$ " + produto!.valorMin.toStringAsFixed(2),
+                        style: TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: Text(
+                        "Sugerido: R\$ " +
+                            produto!.valorSugerido.toStringAsFixed(2),
+                        style: TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: Text(
+                        "Venda: R\$ " + produto!.valorProd.toStringAsFixed(2),
+                        style: TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 8),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          showDialog(context: context, builder: (context) => AlertDialog(content: Text(produto!.valorCompra.toStringAsFixed(2)),));
+                        },
+                        icon: Icon(
+                          Icons.lightbulb,
+                          color: Colors.yellow,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           );
@@ -83,7 +124,9 @@ class _ViewProdutoState extends State<ViewProduto> {
         }
 
         // By default, show a loading spinner.
-        return const Center(child: CircularProgressIndicator(),);
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
       },
     );
   }

@@ -104,7 +104,7 @@ class _ConsultaPrecoState extends State<ConsultaPreco> {
             child: ListView.builder(
               itemCount: produtos!.length,
               itemBuilder: (context, index) {
-                return _produtoCard(context, index);
+                return _produtoCard(context, produtos![index]);
               },
             ),
           );
@@ -118,11 +118,12 @@ class _ConsultaPrecoState extends State<ConsultaPreco> {
     );
   }
 
-  Widget _produtoCard(BuildContext context, int index) {
+  Widget _produtoCard(BuildContext context, Produto prod) {
     return GestureDetector(
       onTap: (){
-        print(index.toString());
-        Navigator.pushNamed(context, ViewProduto.routeName, arguments: index);
+        print(prod.toString());
+
+        Navigator.pushNamed(context, ViewProduto.routeName, arguments: prod);
       },
       child: Card(
         child: Padding(
@@ -144,7 +145,7 @@ class _ConsultaPrecoState extends State<ConsultaPreco> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      produtos![index].descricao,
+                      prod.descricao,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -153,7 +154,7 @@ class _ConsultaPrecoState extends State<ConsultaPreco> {
                       maxLines: 1,
                     ),
                     Text(
-                      produtos![index].id.toString(),
+                      prod.id.toString(),
                       style: TextStyle(
                         fontSize: 14,
                       ),
