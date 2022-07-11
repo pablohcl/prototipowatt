@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -18,8 +19,8 @@ class LoginScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: ScopedModelDescendant<UserModel>(
-        builder: (context, child, model){
-          if(model.isLoading){
+        builder: (context, child, model) {
+          if (model.isLoading) {
             return Center(child: CircularProgressIndicator(),);
           }
           return Form(
@@ -28,10 +29,10 @@ class LoginScreen extends StatelessWidget {
               padding: EdgeInsets.all(16),
               children: [
                 TextFormField(
-                  validator: (text){
-                    if(text!.isEmpty) return "Preencha o e-mail!";
+                  validator: (text) {
+                    if (text!.isEmpty) return "Preencha o e-mail!";
                   },
-                  onChanged: (txt){
+                  onChanged: (txt) {
                     email = txt;
                   },
                   decoration: InputDecoration(
@@ -42,8 +43,8 @@ class LoginScreen extends StatelessWidget {
                   height: 16,
                 ),
                 TextFormField(
-                  validator: (text){
-                    if(text!.isEmpty) return "Preencha a senha!";
+                  validator: (text) {
+                    if (text!.isEmpty) return "Preencha a senha!";
                   },
                   onChanged: (txt) {
                     senha = txt;
@@ -70,7 +71,7 @@ class LoginScreen extends StatelessWidget {
                   height: 44,
                   child: ElevatedButton(
                       onPressed: () {
-                        if(_formKey.currentState!.validate()){
+                        if (_formKey.currentState!.validate()) {
                           model.signIn(email, senha, context);
                         }
                       },
