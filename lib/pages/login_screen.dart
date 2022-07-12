@@ -26,7 +26,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    verificaSeEstaLogado();
+    if(_auth.currentUser != null){
+      _auth.signOut();
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text("Entrar"),

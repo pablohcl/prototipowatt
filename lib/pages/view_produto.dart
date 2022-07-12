@@ -106,7 +106,9 @@ class _ViewProdutoState extends State<ViewProduto> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          showDialog(context: context, builder: (context) => AlertDialog(content: Text(produto!.valorCompra.toStringAsFixed(2)),));
+                          if(helper.isAdmin()){
+                            showDialog(context: context, builder: (context) => AlertDialog(content: Text(produto!.valorCompra.toStringAsFixed(2)),));
+                          }
                         },
                         icon: Icon(
                           Icons.lightbulb,

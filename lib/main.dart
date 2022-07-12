@@ -24,38 +24,39 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Firebase.initializeApp(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text('${snapshot.error}');
-        } else if (snapshot.hasData) {
-          return ScopedModel<UserModel>(
-            model: UserModel(),
-            child: MaterialApp(
-              title: 'Flutter Demo',
-              theme: ThemeData(
-                // This is the theme of your application.
-                //
-                // Try running your application with "flutter run". You'll see the
-                // application has a blue toolbar. Then, without quitting the app, try
-                // changing the primarySwatch below to Colors.green and then invoke
-                // "hot reload" (press "r" in the console where you ran "flutter run",
-                // or simply save your changes to "hot reload" in a Flutter IDE).
-                // Notice that the counter didn't reset back to zero; the application
-                // is not restarted.
-                primarySwatch: Colors.green,
+        future: Firebase.initializeApp(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text('${snapshot.error}');
+          } else if (snapshot.hasData) {
+            return ScopedModel<UserModel>(
+              model: UserModel(),
+              child: MaterialApp(
+                title: 'Flutter Demo',
+                theme: ThemeData(
+                  // This is the theme of your application.
+                  //
+                  // Try running your application with "flutter run". You'll see the
+                  // application has a blue toolbar. Then, without quitting the app, try
+                  // changing the primarySwatch below to Colors.green and then invoke
+                  // "hot reload" (press "r" in the console where you ran "flutter run",
+                  // or simply save your changes to "hot reload" in a Flutter IDE).
+                  // Notice that the counter didn't reset back to zero; the application
+                  // is not restarted.
+                  primarySwatch: Colors.green,
+                ),
+                home: LoginScreen(),
+                routes: {
+                  ViewProduto.routeName: (context) => const ViewProduto(),
+                },
               ),
-              home: LoginScreen(),
-              routes: {
-                ViewProduto.routeName: (context) => const ViewProduto(),
-              },
-            ),
-          );
-        } else {
-          return Center(child: CircularProgressIndicator(),);
-        }
-      }
-    );
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
   }
 }
 
@@ -72,7 +73,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    if(_auth.currentUser != null){
+    if (_auth.currentUser != null) {
       return SafeArea(
         child: Scaffold(
           appBar: AppBar(
@@ -80,19 +81,35 @@ class _HomePageState extends State<HomePage> {
               IconButton(
                 icon: Icon(Icons.refresh),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Atualizar()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Atualizar()));
                 },
               ),
               PopupMenuButton<Menu>(
                 onSelected: (value) {
                   setState(() {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ConsultaPreco()));
+                    if (value == Menu.itemOne) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ConsultaPreco()));
+                    } else if(value == Menu.itemTwo){
+                      _auth.signOut();
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginScreen()));
+                    }
                   });
                 },
                 itemBuilder: (context) => <PopupMenuEntry<Menu>>[
                   PopupMenuItem<Menu>(
                     child: Text('Consultar preços'),
                     value: Menu.itemOne,
+                  ),
+                  PopupMenuItem<Menu>(
+                    child: Text('Sair'),
+                    value: Menu.itemTwo,
                   ),
                 ],
               ),
@@ -114,8 +131,10 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => NovoCliente()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NovoCliente()));
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -139,8 +158,10 @@ class _HomePageState extends State<HomePage> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => NovoPedido()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NovoPedido()));
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -948,21 +969,20 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     } else {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
       return Text("Faça login!");
     }
   }
 
-
   @override
   void deactivate() {
+    //helper.close();
     super.deactivate();
-    _auth.signOut();
   }
 
   @override
   void dispose() {
     super.dispose();
-    helper.close();
   }
 }

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'produto.dart';
@@ -6,6 +7,7 @@ final String tabelaProduto = "t_produto";
 
 class DbHelper {
   static final DbHelper _instance = DbHelper.internal();
+  FirebaseAuth _auth = FirebaseAuth.instance;
 
   factory DbHelper() => _instance;
 
@@ -132,5 +134,13 @@ class DbHelper {
   close() async {
     Database? dbProd = await db;
     dbProd!.close();
+  }
+
+  bool isAdmin(){
+    if(_auth.currentUser!.email == "pablo@wattdistribuidora.com.br"){
+      return true;
+    } else {
+      return false;
+    }
   }
 }
