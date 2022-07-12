@@ -969,9 +969,9 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     } else {
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
-      return Text("Faça login!");
+      /*Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));*/
+      return LoginScreen();
     }
   }
 
