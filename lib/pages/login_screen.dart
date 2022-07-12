@@ -1,18 +1,32 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:prototipo/main.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import '../models/user_model.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   String email = "";
   String senha = "";
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    verificaSeEstaLogado();
     return Scaffold(
       appBar: AppBar(
         title: Text("Entrar"),
@@ -21,7 +35,9 @@ class LoginScreen extends StatelessWidget {
       body: ScopedModelDescendant<UserModel>(
         builder: (context, child, model) {
           if (model.isLoading) {
-            return Center(child: CircularProgressIndicator(),);
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           }
           return Form(
             key: _formKey,
@@ -88,5 +104,13 @@ class LoginScreen extends StatelessWidget {
         },
       ),
     );
+  }
+  void verificaSeEstaLogado(){
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      if (_auth.currentUser != null) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => HomePage()));
+      }
+    });
   }
 }
