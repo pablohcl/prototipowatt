@@ -71,40 +71,18 @@ class _ViewProdutoState extends State<ViewProduto> {
                 Row(
                   children: [
                     Expanded(
-                      flex: 4,
+                      flex: 9,
                       child: Text(
                         "Mínimo: R\$ " + produto!.valorMin.toStringAsFixed(2),
                         style: TextStyle(
                           fontSize: 14,
+                          color: Colors.red,
                         ),
                       ),
                     ),
                     Expanded(
-                      flex: 4,
-                      child: Text(
-                        "Sugerido: R\$ " +
-                            produto!.valorSugerido.toStringAsFixed(2),
-                        style: TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 4,
-                      child: Text(
-                        "Venda: R\$ " + produto!.valorProd.toStringAsFixed(2),
-                        style: TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 8),
-                  child: Row(
-                    children: [
-                      IconButton(
+                      flex: 1,
+                      child: IconButton(
                         onPressed: () {
                           if(helper.isAdmin()){
                             showDialog(context: context, builder: (context) => AlertDialog(content: Text(produto!.valorCompra.toStringAsFixed(2)),));
@@ -115,9 +93,34 @@ class _ViewProdutoState extends State<ViewProduto> {
                           color: Colors.yellow,
                         ),
                       ),
-                    ],
-                  ),
-                )
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      "Sugerido: R\$ " +
+                          produto!.valorSugerido.toStringAsFixed(2),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.yellow,
+                      ),
+                    ),
+                    SizedBox(height: 25,),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      "Venda: R\$ " + produto!.valorProd.toStringAsFixed(2),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.green,
+                      ),
+                    ),
+                    SizedBox(height: 30,),
+                  ],
+                ),
               ],
             ),
           );

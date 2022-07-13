@@ -95,6 +95,7 @@ class _HomePageState extends State<HomePage> {
                               builder: (context) => ConsultaPreco()));
                     } else if(value == Menu.itemTwo){
                       _auth.signOut();
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
                     }
                   });
                 },
