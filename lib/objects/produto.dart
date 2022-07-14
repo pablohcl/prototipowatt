@@ -1,4 +1,5 @@
 final String idColumn = "id";
+String refColumn = "ref";
 String descColumn = "descricao";
 String undColumn = "undMedida";
 String grupoColumn = "grupo";
@@ -9,6 +10,7 @@ String vSugColumn = "vSug";
 
 class Produto {
   final int id;
+  final String ref;
   final String descricao;
   final String undMedida;
   final int grupo;
@@ -19,6 +21,7 @@ class Produto {
 
   const Produto({
     required this.id,
+    required this.ref,
     required this.descricao,
     required this.undMedida,
     required this.grupo,
@@ -31,6 +34,7 @@ class Produto {
   factory Produto.fromTxt(Map<String, dynamic> txt) {
     return Produto(
       id: txt[idColumn] as int,
+      ref: txt[refColumn] as String,
       descricao: txt[descColumn] as String,
       undMedida: txt[undColumn] as String,
       grupo: txt[grupoColumn] as int,
@@ -43,6 +47,7 @@ class Produto {
   factory Produto.fromMap(Map<dynamic, dynamic> txt) {
     return Produto(
       id: txt[idColumn] as int,
+      ref: txt[refColumn] as String,
       descricao: txt[descColumn] as String,
       undMedida: txt[undColumn] as String,
       grupo: txt[grupoColumn] as int,
@@ -56,6 +61,7 @@ class Produto {
   Map<String, dynamic> toMap() {
     return {
       idColumn : id,
+      refColumn : ref,
       descColumn : descricao,
       undColumn : undMedida,
       grupoColumn : grupo,
@@ -68,6 +74,6 @@ class Produto {
 
   @override
   String toString() {
-    return 'id: $id, Descrição: $descricao, Unidade: $undMedida, Grupo: $grupo';
+    return 'id: $id, Ref: $ref, Descrição: $descricao, Unidade: $undMedida, Grupo: $grupo';
   }
 }

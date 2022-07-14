@@ -31,7 +31,7 @@ class DbHelper {
     return await openDatabase(path, version: 1,
         onCreate: (Database db, int newerVersion) async {
       await db.execute(
-          "CREATE TABLE $tabelaProduto($idColumn INT PRIMARY KEY, $descColumn TEXT, $undColumn TEXT, $grupoColumn INT, $vCompraColumn DECIMAL, $vMinColumn DECIMAL, $vProdColumn DECIMAL, $vSugColumn DECIMAL)");
+          "CREATE TABLE $tabelaProduto($idColumn INT PRIMARY KEY, $refColumn TEXT, $descColumn TEXT, $undColumn TEXT, $grupoColumn INT, $vCompraColumn DECIMAL, $vMinColumn DECIMAL, $vProdColumn DECIMAL, $vSugColumn DECIMAL)");
     });
   }
 
@@ -42,13 +42,14 @@ class DbHelper {
       final linha = listProds[i].toString().split(';');
       final Map<String, dynamic> map = {
         idColumn : int.parse(linha[0].substring(1)),
-        descColumn: linha[1],
-        undColumn: linha[2],
-        grupoColumn: int.parse(linha[3]),
-        vCompraColumn: linha[4].replaceAll(",", ".").replaceAll(" ", ""),
-        vMinColumn: linha[5].replaceAll(",", ".").replaceAll(" ", ""),
-        vProdColumn: linha[6].replaceAll(",", ".").replaceAll(" ", ""),
-        vSugColumn: linha[7].substring(0, linha[7].length -1).replaceAll(",", ".").replaceAll(" ", ""),
+        refColumn : linha[1].toString(),
+        descColumn: linha[2],
+        undColumn: linha[3],
+        grupoColumn: int.parse(linha[4]),
+        vCompraColumn: linha[5].replaceAll(",", ".").replaceAll(" ", ""),
+        vMinColumn: linha[6].replaceAll(",", ".").replaceAll(" ", ""),
+        vProdColumn: linha[7].replaceAll(",", ".").replaceAll(" ", ""),
+        vSugColumn: linha[8].substring(0, linha[8].length -1).replaceAll(",", ".").replaceAll(" ", ""),
       };
       print(map[vCompraColumn]);
       final Produto prod = await getProduto(map[idColumn]);
@@ -82,7 +83,7 @@ class DbHelper {
       print(maps.toString());
       return Produto.fromMap(maps.first);
     } else {
-      return new Produto(id: 0, descricao: "null", undMedida: "null", grupo: 0, valorCompra: 0, valorMin: 0, valorProd: 0, valorSugerido: 0);
+      return new Produto(id: 0, ref: "null", descricao: "null", undMedida: "null", grupo: 0, valorCompra: 0, valorMin: 0, valorProd: 0, valorSugerido: 0);
     }
   }
 
@@ -137,7 +138,7 @@ class DbHelper {
   }
 
   bool isAdmin(){
-    if(_auth.currentUser!.email == "pablo@wattdistribuidora.com.br"){
+    if(_auth.currentUser!.email == "pablo@wattdistribuidora.com.br" || _auth.currentUser!.email == "waltair@wattdistribuidora.com.br"){
       return true;
     } else {
       return false;

@@ -82,17 +82,7 @@ class _ViewProdutoState extends State<ViewProduto> {
                     ),
                     Expanded(
                       flex: 1,
-                      child: IconButton(
-                        onPressed: () {
-                          if(helper.isAdmin()){
-                            showDialog(context: context, builder: (context) => AlertDialog(content: Text(produto!.valorCompra.toStringAsFixed(2)),));
-                          }
-                        },
-                        icon: Icon(
-                          Icons.lightbulb,
-                          color: Colors.yellow,
-                        ),
-                      ),
+                      child: myIconButton(),
                     ),
                   ],
                 ),
@@ -134,5 +124,23 @@ class _ViewProdutoState extends State<ViewProduto> {
         );
       },
     );
+  }
+
+  Widget myIconButton(){
+    if(helper.isAdmin()){
+      return IconButton(
+        onPressed: () {
+          if(helper.isAdmin()){
+            showDialog(context: context, builder: (context) => AlertDialog(content: Text(produto!.valorCompra.toStringAsFixed(2)),));
+          }
+        },
+        icon: Icon(
+          Icons.lightbulb,
+          color: Colors.yellow,
+        ),
+      );
+    } else {
+      return SizedBox();
+    }
   }
 }
