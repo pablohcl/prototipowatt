@@ -44,6 +44,12 @@ class _ConsultaPrecoState extends State<ConsultaPreco> {
                 Expanded(
                   flex: 7,
                   child: TextField(
+                    onSubmitted: (txt){
+                      futureProdutos = helper.buscaProdutos(txt);
+                      setState(() {
+                        preencheListView();
+                      });
+                    },
                     controller: buscaController,
                     decoration: InputDecoration(
                       labelStyle: TextStyle(color: Colors.green),
@@ -66,8 +72,6 @@ class _ConsultaPrecoState extends State<ConsultaPreco> {
                       ),
                     ),
                     onPressed: () {
-                      print("INICIO DO onPressed() ####################");
-                      print(buscaController.text);
                       futureProdutos = helper.buscaProdutos(buscaController.text);
                       setState(() {
                         preencheListView();
