@@ -25,7 +25,12 @@ class _ViewProdutoState extends State<ViewProduto> {
     futureProduto = pegaProduto();
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: Text(argsProduto!.id.toString()),),
+        appBar: AppBar(
+          title: Text(argsProduto!.id.toString()),
+          actions: [
+            myIconButton(),
+          ],
+        ),
         body: Column(
           children: [
             mostraProduto(),
@@ -70,45 +75,45 @@ class _ViewProdutoState extends State<ViewProduto> {
                 Divider(),
                 Row(
                   children: [
-                    Expanded(
-                      flex: 9,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
                       child: Text(
                         "Mínimo: R\$ " + produto!.valorMin.toStringAsFixed(2),
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.red,
+                          color: Colors.black,
                         ),
                       ),
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: myIconButton(),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Text(
+                        "Sugerido: R\$ " +
+                            produto!.valorSugerido.toStringAsFixed(2),
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
+                      ),
                     ),
                   ],
                 ),
                 Row(
                   children: [
-                    Text(
-                      "Sugerido: R\$ " +
-                          produto!.valorSugerido.toStringAsFixed(2),
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.yellow,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Text(
+                        "Venda: R\$ " + produto!.valorProd.toStringAsFixed(2),
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
-                    SizedBox(height: 25,),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "Venda: R\$ " + produto!.valorProd.toStringAsFixed(2),
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.green,
-                      ),
-                    ),
-                    SizedBox(height: 30,),
                   ],
                 ),
               ],
@@ -126,12 +131,16 @@ class _ViewProdutoState extends State<ViewProduto> {
     );
   }
 
-  Widget myIconButton(){
-    if(helper.isAdmin()){
+  Widget myIconButton() {
+    if (helper.isAdmin()) {
       return IconButton(
         onPressed: () {
-          if(helper.isAdmin()){
-            showDialog(context: context, builder: (context) => AlertDialog(content: Text(produto!.valorCompra.toStringAsFixed(2)),));
+          if (helper.isAdmin()) {
+            showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                      content: Text(produto!.valorCompra.toStringAsFixed(2)),
+                    ));
           }
         },
         icon: Icon(

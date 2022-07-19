@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:prototipo/main.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/user_model.dart';
 
@@ -18,15 +19,12 @@ class _LoginScreenState extends State<LoginScreen> {
   String email = "";
   String senha = "";
   FirebaseAuth _auth = FirebaseAuth.instance;
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  String? mailSalvo = "";
+  TextEditingController mailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    if(_auth.currentUser != null){
+    if (_auth.currentUser != null) {
       _auth.signOut();
     }
     return Scaffold(
@@ -53,8 +51,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   onChanged: (txt) {
                     email = txt;
                   },
+                  controller: mailController,
                   decoration: InputDecoration(
-                    hintText: "Usuário",
+                    hintText: "E-mail",
                   ),
                 ),
                 SizedBox(
@@ -90,6 +89,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
+                          savePrefs(email);
+                          print(email);
                           model.signIn(email, senha, context);
                         }
                       },
@@ -107,7 +108,30 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-  void verificaSeEstaLogado(){
+
+  @override
+  void initState() {
+    super.initState();
+    getPrefs();
+  }
+
+  Future<void> savePrefs(String s) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString('mail', s);
+  }
+
+  Future<void> getPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      print(prefs.getString('mail'));
+      mailSalvo = prefs.getString('mail') ?? "";
+      email = mailSalvo!;
+      mailController.text = mailSalvo!;
+    });
+  }
+
+  void verificaSeEstaLogado() {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       if (_auth.currentUser != null) {
         Navigator.pushReplacement(

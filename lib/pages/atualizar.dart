@@ -64,6 +64,7 @@ class _AtualizarState extends State<Atualizar> {
     if (response.statusCode == 200) {
       final List<List<dynamic>> rowsAsListOfValues = CsvToListConverter().convert(response.body);
 
+      await helper.recreateTables();
       await helper.saveProdutos(rowsAsListOfValues);
       Future<List<Produto>> l = helper.getTodosProdutos();
       l.then((value) => print(value.length));
