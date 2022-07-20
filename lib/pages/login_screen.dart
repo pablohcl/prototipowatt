@@ -21,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   String? mailSalvo = "";
   TextEditingController mailController = TextEditingController();
+  bool isChecked = true;
 
   @override
   Widget build(BuildContext context) {
@@ -59,17 +60,41 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 16,
                 ),
-                TextFormField(
-                  validator: (text) {
-                    if (text!.isEmpty) return "Preencha a senha!";
-                  },
-                  onChanged: (txt) {
-                    senha = txt;
-                  },
-                  decoration: InputDecoration(
-                    hintText: "Senha",
-                  ),
-                  obscureText: true,
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 9,
+                      child: TextFormField(
+                        validator: (text) {
+                          if (text!.isEmpty) return "Preencha a senha!";
+                        },
+                        onChanged: (txt) {
+                          senha = txt;
+                        },
+                        decoration: InputDecoration(
+                          hintText: "Senha",
+                        ),
+                        obscureText: isChecked,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 18.0),
+                        child: IconButton(
+                          onPressed: () {
+                            setState(
+                              () {
+                                isChecked = !isChecked;
+                              },
+                            );
+                          },
+                          color: Colors.black.withOpacity(0.4),
+                          icon: Icon(isChecked ? Icons.visibility : Icons.visibility_off),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 Align(
                   alignment: Alignment.centerRight,
