@@ -50,6 +50,12 @@ class _ConsultaPrecoState extends State<ConsultaPreco> {
                         preencheListView();
                       });
                     },
+                    onChanged: (String txt){
+                      futureProdutos = helper.buscaProdutos(txt);
+                      setState(() {
+                        preencheListView();
+                      });
+                    },
                     controller: buscaController,
                     decoration: InputDecoration(
                       labelStyle: TextStyle(color: Colors.green),

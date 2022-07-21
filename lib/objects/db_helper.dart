@@ -126,7 +126,7 @@ class DbHelper {
   Future<List<Produto>> buscaProdutos(String textoDigitado) async {
     Database? dbProd = await db;
     String queryString = "SELECT * FROM $tabelaProduto WHERE $descColumn LIKE ";
-    final splittedText = textoDigitado.split(";");
+    final splittedText = textoDigitado.split(",");
     for(int i = 0; i < splittedText.length; i++){
       final String txt = splittedText[i].toString().trim();
       if(i != splittedText.length-1){
