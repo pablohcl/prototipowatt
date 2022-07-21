@@ -125,11 +125,18 @@ class DbHelper {
 
   Future<List<Produto>> buscaProdutos(String textoDigitado) async {
     Database? dbProd = await db;
+    String queryString = "SELECT * FROM $tabelaProduto WHERE $descColumn LIKE ";
+    final splittedText = textoDigitado.split(";");
+    for(int i = 0; i < splittedText.length; i++){
+      final String txt = splittedText[i].toString().trim();
+      if(i != splittedText.length-1){
+        queryString = queryString+"'%$txt%' AND $descColumn LIKE ";
+      } else {
+        queryString = queryString+"'%$txt%'";
+      }
+    }
     List listMap = await dbProd!.rawQuery(
-        "SELECT * FROM $tabelaProduto WHERE $descColumn LIKE '%$textoDigitado%'");
-    print(
-        "SELECT * FROM $tabelaProduto WHERE $descColumn LIKE '%$textoDigitado%'");
-    print(listMap.length);
+        queryString);
     return List.generate(
       listMap.length,
       (index) {
