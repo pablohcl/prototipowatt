@@ -2,12 +2,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'produto.dart';
+import 'cond_pgto.dart';
 
 final String tabelaProduto = "t_produto";
+final String tabelaCondicoes = "t_condicoes";
 
-final String dropTables = "DROP TABLE $tabelaProduto";
-final String createTables =
+final String dropTableProdutos = "DROP TABLE $tabelaProduto";
+final String dropTableCondicoes = "DROP TABLE $tabelaCondicoes";
+final String createTableProdutos =
     "CREATE TABLE $tabelaProduto($idColumn INT PRIMARY KEY, $refColumn TEXT, $descColumn TEXT, $undColumn TEXT, $grupoColumn INT, $vCompraColumn DECIMAL, $vMinColumn DECIMAL, $vProdColumn DECIMAL, $vSugColumn DECIMAL)";
+final String createTableCondicoes =
+    "CREATE TABLE $tabelaCondicoes($idCondColumn INT PRIMARY KEY, $condCondColumn TEXT)";
 
 class DbHelper {
   static final DbHelper _instance = DbHelper.internal();
@@ -36,15 +41,21 @@ class DbHelper {
       path,
       version: 1,
       onCreate: (Database db, int newerVersion) async {
-        await db.execute(createTables);
+        await db.execute(createTableProdutos);
+        await db.execute(createTableCondicoes);
       },
     );
   }
 
-  Future<void> recreateTables() async {
+  Future<void> recreateTable(String table) async {
     Database? dbProd = await db;
-    await dbProd!.execute(dropTables);
-    await dbProd.execute(createTables);
+    if(table == 'produtos'){
+      await dbProd!.execute(dropTableProdutos);
+      await dbProd.execute(createTableProdutos);
+    } else if(table == 'condicoes'){
+      await dbProd!.execute(dropTableCondicoes);
+      await dbProd.execute(createTableCondicoes);
+    }
   }
 
   Future<List<dynamic>> saveProdutos(List<List<dynamic>> listProds) async {
@@ -69,6 +80,22 @@ class DbHelper {
       print(map[vCompraColumn]);
 
       batch.insert(tabelaProduto, map);
+    }
+
+    return await batch.commit();
+  }
+
+  Future<List<dynamic>> saveCondicoes(List<List<dynamic>> listConds) async {
+    Database? dbProd = await db;
+    var batch = dbProd!.batch();
+    for (int i = 1; i < listConds.length; i++) {
+      final linha = listConds[i].toString().split(';');
+      final Map<String, dynamic> map = {
+        idCondColumn: int.parse(linha[0].substring(1)),
+        condCondColumn: linha[1].toString(),
+      };
+
+      batch.insert(tabelaCondicoes, map);
     }
 
     return await batch.commit();
@@ -121,6 +148,20 @@ class DbHelper {
     );
 
     return listProd;
+  }
+
+  Future<List<CondPgto>> getTodasCondicoes() async {
+    Database? dbProd = await db;
+    List listMap = await dbProd!.rawQuery("SELECT * FROM $tabelaCondicoes");
+    List<CondPgto> listCond = List.generate(
+      listMap.length,
+          (index) {
+        return CondPgto.fromMap(listMap[index]);
+      },
+      growable: true,
+    );
+
+    return listCond;
   }
 
   Future<List<Produto>> buscaProdutos(String textoDigitado) async {

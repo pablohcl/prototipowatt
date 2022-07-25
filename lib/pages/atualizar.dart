@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
+import 'package:prototipo/objects/cond_pgto.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -23,6 +24,10 @@ class Atualizar extends StatefulWidget {
 class _AtualizarState extends State<Atualizar> {
 
   late Future<List<dynamic>> futureProdList;
+  late Future<List<dynamic>> futureCondList;
+  late List? produtos;
+  late List? condicoes;
+
   DbHelper helper = DbHelper();
 
   @override
@@ -32,20 +37,39 @@ class _AtualizarState extends State<Atualizar> {
         appBar: AppBar(
           title: Text("Atualizando"),
         ),
-        body: Center(
-          child: FutureBuilder<List<dynamic>>(
-            future: futureProdList,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Text(snapshot.data!.length.toString() + " Produtos atualizados!");
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
+        body: Column(
+          children: [
+            Center(
+              child: FutureBuilder<List<dynamic>>(
+                future: futureProdList,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    //return Text(snapshot.data!.length.toString() + " Produtos atualizados!");
+                    produtos = snapshot.data;
+                    return Text(produtos!.length.toString()+" Registros atualizados");
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
 
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
-            },
-          ),
+                  // By default, show a loading spinner.
+                  return Center(child: const CircularProgressIndicator());
+                },
+              ),
+            ),
+            FutureBuilder<List<dynamic>>(
+              future: futureCondList,
+              builder: (context, snapshot){
+                if(snapshot.hasError){
+                  return Text('${snapshot.error}');
+                } else if(snapshot.hasData){
+                  condicoes = snapshot.data;
+                  return Text(condicoes!.length.toString()+' Registros atualizados');
+                }
+
+                return Center(child: const CircularProgressIndicator());
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -55,6 +79,7 @@ class _AtualizarState extends State<Atualizar> {
   void initState() {
     super.initState();
     futureProdList = fetchProdutos();
+    futureCondList = fetchCondicoes();
   }
 
   Future<List<dynamic>> fetchProdutos() async {
@@ -64,9 +89,27 @@ class _AtualizarState extends State<Atualizar> {
     if (response.statusCode == 200) {
       final List<List<dynamic>> rowsAsListOfValues = CsvToListConverter().convert(response.body);
 
-      await helper.recreateTables();
+      await helper.recreateTable('produtos');
       await helper.saveProdutos(rowsAsListOfValues);
       Future<List<Produto>> l = helper.getTodosProdutos();
+      l.then((value) => print(value.length));
+
+      return rowsAsListOfValues;
+    } else {
+      throw Exception('Falha ao carregar dados');
+    }
+  }
+
+  Future<List<dynamic>> fetchCondicoes() async {
+    final response = await http.get(Uri.parse(
+        'https://pablohenriquecorrea.000webhostapp.com/mobile/t_a_cond.CSV'));
+
+    if (response.statusCode == 200) {
+      final List<List<dynamic>> rowsAsListOfValues = CsvToListConverter().convert(response.body);
+
+      await helper.recreateTable('condicoes');
+      await helper.saveCondicoes(rowsAsListOfValues);
+      Future<List<CondPgto>> l = helper.getTodasCondicoes();
       l.then((value) => print(value.length));
 
       return rowsAsListOfValues;
