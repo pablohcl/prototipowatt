@@ -77,7 +77,7 @@ class DbHelper {
             .replaceAll(",", ".")
             .replaceAll(" ", ""),
       };
-      print(map);
+      print(i);
 
       batch.insert(tabelaProduto, map);
     }
