@@ -1,11 +1,7 @@
-import 'dart:convert';
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/widgets.dart';
-import 'package:path/path.dart';
 import 'package:prototipo/objects/cond_pgto.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototipo/objects/produto.dart';

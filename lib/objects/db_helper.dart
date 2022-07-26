@@ -77,7 +77,7 @@ class DbHelper {
             .replaceAll(",", ".")
             .replaceAll(" ", ""),
       };
-      print(map[vCompraColumn]);
+      print(map);
 
       batch.insert(tabelaProduto, map);
     }
