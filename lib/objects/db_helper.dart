@@ -93,11 +93,11 @@ class DbHelper {
     for (int i = 1; i < listValores.length; i++) {
       final linha = listValores[i].toString().split(';');
       final Map<String, dynamic> map = {
-        idVlrColumn: int.parse(linha[0].substring(1).trim()),
-        vCompraColumn: num.parse(linha[1].replaceAll(',', '.').trim()),
-        vMinColumn: num.parse(linha[2].replaceAll(',', '.').trim()),
-        vendaColumn: num.parse(linha[3].replaceAll(',', '.').trim()),
-        sugColumn: num.parse(linha[4].substring(0, linha[4].length - 1).replaceAll(',', '.').trim()),
+        idVlrColumn: linha[0].substring(1).trim(),
+        vCompraColumn: linha[1].replaceAll(',', '.').trim(),
+        vMinColumn: linha[2].replaceAll(',', '.').trim(),
+        vendaColumn: linha[3].replaceAll(',', '.').trim(),
+        sugColumn: linha[4].substring(0, linha[4].length - 1).replaceAll(',', '.').trim(),
       };
 
       batch.insert(tabelaValores, map);
