@@ -73,7 +73,7 @@ class _ViewProdutoState extends State<ViewProduto> {
                   ],
                 ),
                 Divider(),
-                Row(
+                /*Row(
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -115,7 +115,7 @@ class _ViewProdutoState extends State<ViewProduto> {
                       ),
                     ),
                   ],
-                ),
+                ),*/
               ],
             ),
           );
@@ -135,13 +135,13 @@ class _ViewProdutoState extends State<ViewProduto> {
     if (helper.isAdmin()) {
       return IconButton(
         onPressed: () {
-          if (helper.isAdmin()) {
+          /*if (helper.isAdmin()) {
             showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
                       content: Text(produto!.valorCompra.toStringAsFixed(2)),
                     ));
-          }
+          }*/
         },
         icon: Icon(
           Icons.lightbulb,

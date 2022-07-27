@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:prototipo/objects/prod_vlr.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'produto.dart';
@@ -6,13 +7,18 @@ import 'cond_pgto.dart';
 
 final String tabelaProduto = "t_produto";
 final String tabelaCondicoes = "t_condicoes";
+final String tabelaValores = "t_prod_valores";
 
 final String dropTableProdutos = "DROP TABLE $tabelaProduto";
 final String dropTableCondicoes = "DROP TABLE $tabelaCondicoes";
+final String dropTableValores = "DROP TABLE $tabelaValores";
+
 final String createTableProdutos =
-    "CREATE TABLE $tabelaProduto($idColumn INT PRIMARY KEY, $refColumn TEXT, $descColumn TEXT, $undColumn TEXT, $grupoColumn INT, $vCompraColumn DECIMAL, $vMinColumn DECIMAL, $vProdColumn DECIMAL, $vSugColumn DECIMAL)";
+    "CREATE TABLE $tabelaProduto($idColumn INT PRIMARY KEY, $refColumn TEXT, $descColumn TEXT, $undColumn TEXT, $grupoColumn INT)";
 final String createTableCondicoes =
     "CREATE TABLE $tabelaCondicoes($idCondColumn INT PRIMARY KEY, $condCondColumn TEXT)";
+final String createTableValores =
+    "CREATE TABLE $tabelaValores($idVlrColumn INT PRIMARY KEY, $vCompraColumn DECIMAL, $vMinColumn DECIMAL, $vendaColumn DECIMAL, $sugColumn DECIMAL)";
 
 class DbHelper {
   static final DbHelper _instance = DbHelper.internal();
@@ -43,18 +49,22 @@ class DbHelper {
       onCreate: (Database db, int newerVersion) async {
         await db.execute(createTableProdutos);
         await db.execute(createTableCondicoes);
+        await db.execute(createTableValores);
       },
     );
   }
 
   Future<void> recreateTable(String table) async {
     Database? dbProd = await db;
-    if(table == 'produtos'){
+    if (table == 'produtos') {
       await dbProd!.execute(dropTableProdutos);
       await dbProd.execute(createTableProdutos);
-    } else if(table == 'condicoes'){
+    } else if (table == 'condicoes') {
       await dbProd!.execute(dropTableCondicoes);
       await dbProd.execute(createTableCondicoes);
+    } else if (table == 'valores') {
+      await dbProd!.execute(dropTableValores);
+      await dbProd.execute(createTableValores);
     }
   }
 
@@ -68,18 +78,29 @@ class DbHelper {
         refColumn: linha[1].toString(),
         descColumn: linha[2],
         undColumn: linha[3],
-        grupoColumn: int.parse(linha[4]),
-        vCompraColumn: linha[5].replaceAll(",", ".").replaceAll(" ", ""),
-        vMinColumn: linha[6].replaceAll(",", ".").replaceAll(" ", ""),
-        vProdColumn: linha[7].replaceAll(",", ".").replaceAll(" ", ""),
-        vSugColumn: linha[8]
-            .substring(0, linha[8].length - 1)
-            .replaceAll(",", ".")
-            .replaceAll(" ", ""),
+        grupoColumn: int.parse(linha[4].substring(0, linha[4].length - 1)),
       };
-      print(i);
 
       batch.insert(tabelaProduto, map);
+    }
+
+    return await batch.commit();
+  }
+
+  Future<List<dynamic>> saveValores(List<List<dynamic>> listValores) async {
+    Database? dbProd = await db;
+    var batch = dbProd!.batch();
+    for (int i = 1; i < listValores.length; i++) {
+      final linha = listValores[i].toString().split(';');
+      final Map<String, dynamic> map = {
+        idVlrColumn: int.parse(linha[0].substring(1).trim()),
+        vCompraColumn: num.parse(linha[1].replaceAll(',', '.').trim()),
+        vMinColumn: num.parse(linha[2].replaceAll(',', '.').trim()),
+        vendaColumn: num.parse(linha[3].replaceAll(',', '.').trim()),
+        sugColumn: num.parse(linha[4].substring(0, linha[4].length - 1).replaceAll(',', '.').trim()),
+      };
+
+      batch.insert(tabelaValores, map);
     }
 
     return await batch.commit();
@@ -118,15 +139,7 @@ class DbHelper {
       return Produto.fromMap(maps.first);
     } else {
       return new Produto(
-          id: 0,
-          ref: "null",
-          descricao: "null",
-          undMedida: "null",
-          grupo: 0,
-          valorCompra: 0,
-          valorMin: 0,
-          valorProd: 0,
-          valorSugerido: 0);
+          id: 0, ref: "null", descricao: "null", undMedida: "null", grupo: 0);
     }
   }
 
@@ -150,12 +163,26 @@ class DbHelper {
     return listProd;
   }
 
+  Future<List<ProdVlr>> getTodosValores() async {
+    Database? dbProd = await db;
+    List listMap = await dbProd!.rawQuery("SELECT * FROM $tabelaValores");
+    List<ProdVlr> listValores = List.generate(
+      listMap.length,
+          (index) {
+        return ProdVlr.fromMap(listMap[index]);
+      },
+      growable: true,
+    );
+
+    return listValores;
+  }
+
   Future<List<CondPgto>> getTodasCondicoes() async {
     Database? dbProd = await db;
     List listMap = await dbProd!.rawQuery("SELECT * FROM $tabelaCondicoes");
     List<CondPgto> listCond = List.generate(
       listMap.length,
-          (index) {
+      (index) {
         return CondPgto.fromMap(listMap[index]);
       },
       growable: true,
@@ -168,16 +195,15 @@ class DbHelper {
     Database? dbProd = await db;
     String queryString = "SELECT * FROM $tabelaProduto WHERE $descColumn LIKE ";
     final splittedText = textoDigitado.split(",");
-    for(int i = 0; i < splittedText.length; i++){
+    for (int i = 0; i < splittedText.length; i++) {
       final String txt = splittedText[i].toString().trim();
-      if(i != splittedText.length-1){
-        queryString = queryString+"'%$txt%' AND $descColumn LIKE ";
+      if (i != splittedText.length - 1) {
+        queryString = queryString + "'%$txt%' AND $descColumn LIKE ";
       } else {
-        queryString = queryString+"'%$txt%'";
+        queryString = queryString + "'%$txt%'";
       }
     }
-    List listMap = await dbProd!.rawQuery(
-        queryString);
+    List listMap = await dbProd!.rawQuery(queryString);
     return List.generate(
       listMap.length,
       (index) {
