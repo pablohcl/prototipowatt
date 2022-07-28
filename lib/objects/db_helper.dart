@@ -212,6 +212,8 @@ class DbHelper {
     return listCond;
   }
 
+  // teste de commit (excluir)
+
   Future<List<Produto>> buscaProdutos(String textoDigitado) async {
     Database? dbProd = await db;
     String queryString = "SELECT * FROM $tabelaProduto WHERE $descColumn LIKE ";
