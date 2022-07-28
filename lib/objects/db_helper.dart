@@ -94,10 +94,10 @@ class DbHelper {
       final linha = listValores[i].toString().split(';');
       final Map<String, dynamic> map = {
         idVlrColumn: linha[0].substring(1).trim(),
-        vCompraColumn: linha[1].replaceAll(',', '.').trim(),
-        vMinColumn: linha[2].replaceAll(',', '.').trim(),
-        vendaColumn: linha[3].replaceAll(',', '.').trim(),
-        sugColumn: linha[4].substring(0, linha[4].length - 1).replaceAll(',', '.').trim(),
+        vCompraColumn: linha[1].replaceAll(',', '.').replaceAll(' ', ''),
+        vMinColumn: linha[2].replaceAll(',', '.').replaceAll(' ', ''),
+        vendaColumn: linha[3].replaceAll(',', '.').replaceAll(' ', ''),
+        sugColumn: linha[4].substring(0, linha[4].length - 1).replaceAll(',', '.').replaceAll(' ', ''),
       };
 
       batch.insert(tabelaValores, map);
@@ -140,6 +140,27 @@ class DbHelper {
     } else {
       return new Produto(
           id: 0, ref: "null", descricao: "null", undMedida: "null", grupo: 0);
+    }
+  }
+
+  Future<ProdVlr> getValor(int id) async {
+    Database? dbProd = await db;
+    /*List<Map> maps = await dbProd!.query(
+      tabelaProduto,
+      columns: [idColumn, descColumn, undColumn, grupoColumn, vCompraColumn, vMinColumn, vProdColumn, vSugColumn],
+      where: "$idColumn = ?",
+      whereArgs: [id],
+    );*/
+
+    List<Map> maps = await dbProd!
+        .rawQuery("SELECT * FROM $tabelaValores WHERE $idVlrColumn = $id");
+
+    if (maps.isNotEmpty) {
+      print(maps.toString());
+      return ProdVlr.fromMap(maps.first);
+    } else {
+      return new ProdVlr(
+          id: 0, vlrCompra: 0.00, vlrMinimo: 0.00, vlrVenda: 0.00, vlrSugerido: 0.00);
     }
   }
 
