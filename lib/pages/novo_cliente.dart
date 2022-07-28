@@ -26,7 +26,6 @@ class NovoCliente extends StatefulWidget {
 class _NovoClienteState extends State<NovoCliente> {
   String? tipoCadastro = '';
 
-  late TextEditingController cpfController = TextEditingController();
   late TextEditingController cnpjController = TextEditingController();
 
   late Future<Cliente> futureCli;
@@ -173,7 +172,209 @@ class _NovoClienteState extends State<NovoCliente> {
               SizedBox(
                 height: 8,
               ),
-              TextFormField(
+              Column(
+                children: [
+                  SizedBox(
+                    height: 8,
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    validator: (value) {},
+                    decoration: InputDecoration(
+                      labelText: 'CPF',
+                      labelStyle: TextStyle(color: Colors.green),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      label: Text('Razão Social'),
+                      labelStyle: TextStyle(color: Colors.green),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      label: Text('Fantasia'),
+                      labelStyle: TextStyle(color: Colors.green),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            label: Text('CEP'),
+                            labelStyle: TextStyle(color: Colors.green),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Expanded(
+                        flex: 6,
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            label: Text('Bairro'),
+                            labelStyle: TextStyle(color: Colors.green),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 8,
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            label: Text('Rua'),
+                            labelStyle: TextStyle(color: Colors.green),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            label: Text('Nº'),
+                            labelStyle: TextStyle(color: Colors.green),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 8,
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            label: Text('Município'),
+                            labelStyle: TextStyle(color: Colors.green),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            label: Text('UF'),
+                            labelStyle: TextStyle(color: Colors.green),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      label: Text('E-mail'),
+                      labelStyle: TextStyle(color: Colors.green),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      label: Text('Telefone 1'),
+                      labelStyle: TextStyle(color: Colors.green),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      label: Text('Telefone 2'),
+                      labelStyle: TextStyle(color: Colors.green),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Text(
+                              'Salvar',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                ],
+              ),
+              /*TextFormField(
                 keyboardType: TextInputType.number,
                 controller: cpfController,
                 validator: (value) {},
@@ -184,7 +385,7 @@ class _NovoClienteState extends State<NovoCliente> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-              ),
+              ),*/
             ],
           ),
         ),
@@ -302,7 +503,6 @@ class _NovoClienteState extends State<NovoCliente> {
             onPressed: () {
               Navigator.of(context).pop();
               tipoCadastro = texto;
-              cpfController.text = '';
               cnpjController.text = '';
               setState(() {
                 montaTela();
@@ -473,7 +673,9 @@ class _NovoClienteState extends State<NovoCliente> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 TextFormField(
                   initialValue: snapshot.data!.fone1,
                   decoration: InputDecoration(
@@ -483,7 +685,9 @@ class _NovoClienteState extends State<NovoCliente> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 TextFormField(
                   initialValue: snapshot.data!.fone2,
                   decoration: InputDecoration(
@@ -493,21 +697,28 @@ class _NovoClienteState extends State<NovoCliente> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 Row(
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: (){},
+                        onPressed: () {},
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
-                          child: Text('Salvar', style: TextStyle(fontSize: 18),),
+                          child: Text(
+                            'Salvar',
+                            style: TextStyle(fontSize: 18),
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
               ],
             );
           } else if (snapshot.hasError) {

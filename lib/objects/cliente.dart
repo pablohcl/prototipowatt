@@ -1,3 +1,16 @@
+final String idCliColumn = "id";
+final String cliRazaoColumn = "razao";
+final String cliFantasiaColumn = "fantasia";
+final String cliCepColumn = "cep";
+final String cliRuaColumn = "rua";
+final String cliNumColumn = "numero";
+final String cliBairroColumn = "bairro";
+final String cliCidadeColumn = "cidade";
+final String cliUfColumn = "uf";
+final String cliEmailColumn = "email";
+final String cliFone1Column = "fone1";
+final String cliFone2Column = "fone2";
+
 class Cliente {
   final String documento;
   final String razao;
@@ -42,5 +55,56 @@ class Cliente {
       fone1: json['telefone'] as String,
       fone2: '',
     );
+  }
+
+  factory Cliente.fromTxt(Map<String, dynamic> txt) {
+    return Cliente(
+      documento: txt['cnpj'] as String,
+      razao: txt['nome'] as String,
+      fantasia: txt['fantasia'] as String,
+      cep: txt['cep'] as String,
+      rua: txt['logradouro'] as String,
+      numero: txt['numero'] as String,
+      bairro: txt['bairro'] as String,
+      cidade: txt['municipio'] as String,
+      uf: txt['uf'] as String,
+      email: txt['email'] as String,
+      fone1: txt['telefone'] as String,
+      fone2: '',
+    );
+  }
+
+  factory Cliente.fromMap(Map<dynamic, dynamic> txt) {
+    return Cliente(
+      documento: txt['cnpj'] as String,
+      razao: txt['nome'] as String,
+      fantasia: txt['fantasia'] as String,
+      cep: txt['cep'] as String,
+      rua: txt['logradouro'] as String,
+      numero: txt['numero'] as String,
+      bairro: txt['bairro'] as String,
+      cidade: txt['municipio'] as String,
+      uf: txt['uf'] as String,
+      email: txt['email'] as String,
+      fone1: txt['telefone'] as String,
+      fone2: '',
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      idCliColumn : documento,
+      cliRazaoColumn : razao,
+      cliFantasiaColumn : fantasia,
+      cliCepColumn : cep,
+      cliRuaColumn : rua,
+      cliNumColumn : numero,
+      cliBairroColumn : bairro,
+      cliCidadeColumn : cidade,
+      cliUfColumn : uf,
+      cliEmailColumn : email,
+      cliFone1Column : fone1,
+      cliFone2Column : fone2,
+    };
   }
 }
