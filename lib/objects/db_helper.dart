@@ -9,9 +9,9 @@ final String tabelaProduto = "t_produto";
 final String tabelaCondicoes = "t_condicoes";
 final String tabelaValores = "t_prod_valores";
 
-final String dropTableProdutos = "DROP TABLE $tabelaProduto";
-final String dropTableCondicoes = "DROP TABLE $tabelaCondicoes";
-final String dropTableValores = "DROP TABLE $tabelaValores";
+final String dropTableProdutos = "DROP TABLE IF EXISTS $tabelaProduto";
+final String dropTableCondicoes = "DROP TABLE IF EXISTS $tabelaCondicoes";
+final String dropTableValores = "DROP TABLE IF EXISTS $tabelaValores";
 
 final String createTableProdutos =
     "CREATE TABLE $tabelaProduto($idColumn INT PRIMARY KEY, $refColumn TEXT, $descColumn TEXT, $undColumn TEXT, $grupoColumn INT)";
