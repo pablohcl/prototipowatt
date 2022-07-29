@@ -193,7 +193,7 @@ class _NovoClienteState extends State<NovoCliente> {
                   ),
                   TextFormField(
                     decoration: InputDecoration(
-                      label: Text('Razão Social'),
+                      label: Text('Nome'),
                       labelStyle: TextStyle(color: Colors.green),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -205,7 +205,7 @@ class _NovoClienteState extends State<NovoCliente> {
                   ),
                   TextFormField(
                     decoration: InputDecoration(
-                      label: Text('Fantasia'),
+                      label: Text('Apelido / Nome Fantasia'),
                       labelStyle: TextStyle(color: Colors.green),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
