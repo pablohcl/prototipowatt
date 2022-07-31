@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototipo/objects/cliente.dart';
 
@@ -192,6 +193,7 @@ class _NovoClienteState extends State<NovoCliente> {
                     height: 10,
                   ),
                   TextFormField(
+                    keyboardType: TextInputType.name,
                     decoration: InputDecoration(
                       label: Text('Nome'),
                       labelStyle: TextStyle(color: Colors.green),
@@ -204,6 +206,7 @@ class _NovoClienteState extends State<NovoCliente> {
                     height: 10,
                   ),
                   TextFormField(
+                    keyboardType: TextInputType.name,
                     decoration: InputDecoration(
                       label: Text('Apelido / Nome Fantasia'),
                       labelStyle: TextStyle(color: Colors.green),
@@ -220,6 +223,7 @@ class _NovoClienteState extends State<NovoCliente> {
                       Expanded(
                         flex: 3,
                         child: TextFormField(
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             label: Text('CEP'),
                             labelStyle: TextStyle(color: Colors.green),
@@ -235,6 +239,7 @@ class _NovoClienteState extends State<NovoCliente> {
                       Expanded(
                         flex: 6,
                         child: TextFormField(
+                          keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                             label: Text('Bairro'),
                             labelStyle: TextStyle(color: Colors.green),
@@ -254,6 +259,7 @@ class _NovoClienteState extends State<NovoCliente> {
                       Expanded(
                         flex: 8,
                         child: TextFormField(
+                          keyboardType: TextInputType.streetAddress,
                           decoration: InputDecoration(
                             label: Text('Rua'),
                             labelStyle: TextStyle(color: Colors.green),
@@ -269,6 +275,7 @@ class _NovoClienteState extends State<NovoCliente> {
                       Expanded(
                         flex: 2,
                         child: TextFormField(
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             label: Text('Nº'),
                             labelStyle: TextStyle(color: Colors.green),
@@ -288,6 +295,7 @@ class _NovoClienteState extends State<NovoCliente> {
                       Expanded(
                         flex: 8,
                         child: TextFormField(
+                          keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                             label: Text('Município'),
                             labelStyle: TextStyle(color: Colors.green),
@@ -303,6 +311,10 @@ class _NovoClienteState extends State<NovoCliente> {
                       Expanded(
                         flex: 2,
                         child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(2),
+                          ],
                           decoration: InputDecoration(
                             label: Text('UF'),
                             labelStyle: TextStyle(color: Colors.green),
@@ -318,6 +330,7 @@ class _NovoClienteState extends State<NovoCliente> {
                     height: 10,
                   ),
                   TextFormField(
+                    keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       label: Text('E-mail'),
                       labelStyle: TextStyle(color: Colors.green),
@@ -330,6 +343,7 @@ class _NovoClienteState extends State<NovoCliente> {
                     height: 10,
                   ),
                   TextFormField(
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       label: Text('Telefone 1'),
                       labelStyle: TextStyle(color: Colors.green),
@@ -342,6 +356,7 @@ class _NovoClienteState extends State<NovoCliente> {
                     height: 10,
                   ),
                   TextFormField(
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       label: Text('Telefone 2'),
                       labelStyle: TextStyle(color: Colors.green),
