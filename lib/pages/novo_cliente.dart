@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototipo/objects/cliente.dart';
+import 'package:prototipo/objects/db_helper.dart';
+
+import '../objects/cliente_novo.dart';
 
 Future<Cliente> fetchDados(String cnpj) async {
   final response =
@@ -27,9 +30,24 @@ class NovoCliente extends StatefulWidget {
 class _NovoClienteState extends State<NovoCliente> {
   String? tipoCadastro = '';
 
+  DbHelper helper = DbHelper();
+
   late TextEditingController cnpjController = TextEditingController();
+  late TextEditingController razaoController = TextEditingController();
+  late TextEditingController fantasiaController = TextEditingController();
+  late TextEditingController cepController = TextEditingController();
+  late TextEditingController bairroController = TextEditingController();
+  late TextEditingController ruaController = TextEditingController();
+  late TextEditingController numeroController = TextEditingController();
+  late TextEditingController municipioController = TextEditingController();
+  late TextEditingController ufController = TextEditingController();
+  late TextEditingController emailController = TextEditingController();
+  late TextEditingController fone1Controller = TextEditingController();
+  late TextEditingController fone2Controller = TextEditingController();
 
   late Future<Cliente> futureCli;
+
+  late int idNovoCliente;
 
   @override
   Widget build(BuildContext context) {
@@ -159,27 +177,322 @@ class _NovoClienteState extends State<NovoCliente> {
         ),
       );
     } else if (tipoCadastro == 'fisica') {
-      return Form(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Icon(
-                Icons.person_add,
-                size: 88,
-                color: Colors.green,
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Column(
-                children: [
-                  SizedBox(
-                    height: 8,
-                  ),
-                  TextFormField(
+      return FutureBuilder(
+        future: helper.getLastId(tabelaClienteNovo, idCliColumn),
+        builder: (context, snapshot) {
+          if(snapshot.hasError){
+            return Text('${snapshot.error}');
+          } else if(snapshot.hasData){
+            idNovoCliente = int.parse(snapshot.data.toString());
+            return Form(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Icon(
+                      Icons.person_add,
+                      size: 88,
+                      color: Colors.green,
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: 8,
+                        ),
+                        TextFormField(
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(11),
+                          ],
+                          keyboardType: TextInputType.number,
+                          validator: (value) {},
+                          controller: cnpjController,
+                          decoration: InputDecoration(
+                            labelText: 'CPF',
+                            labelStyle: TextStyle(color: Colors.green),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          controller: razaoController,
+                          keyboardType: TextInputType.name,
+                          decoration: InputDecoration(
+                            label: Text('Nome'),
+                            labelStyle: TextStyle(color: Colors.green),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          controller: fantasiaController,
+                          keyboardType: TextInputType.name,
+                          decoration: InputDecoration(
+                            label: Text('Apelido / Nome Fantasia'),
+                            labelStyle: TextStyle(color: Colors.green),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 3,
+                              child: TextFormField(
+                                controller: cepController,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(8),
+                                ],
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  label: Text('CEP'),
+                                  labelStyle: TextStyle(color: Colors.green),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Expanded(
+                              flex: 6,
+                              child: TextFormField(
+                                controller: bairroController,
+                                keyboardType: TextInputType.text,
+                                decoration: InputDecoration(
+                                  label: Text('Bairro'),
+                                  labelStyle: TextStyle(color: Colors.green),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 8,
+                              child: TextFormField(
+                                controller: ruaController,
+                                keyboardType: TextInputType.streetAddress,
+                                decoration: InputDecoration(
+                                  label: Text('Rua'),
+                                  labelStyle: TextStyle(color: Colors.green),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: TextFormField(
+                                controller: numeroController,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  label: Text('Nº'),
+                                  labelStyle: TextStyle(color: Colors.green),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 8,
+                              child: TextFormField(
+                                controller: municipioController,
+                                keyboardType: TextInputType.text,
+                                decoration: InputDecoration(
+                                  label: Text('Município'),
+                                  labelStyle: TextStyle(color: Colors.green),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: TextFormField(
+                                controller: ufController,
+                                keyboardType: TextInputType.text,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(2),
+                                ],
+                                decoration: InputDecoration(
+                                  label: Text('UF'),
+                                  labelStyle: TextStyle(color: Colors.green),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          controller: emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                            label: Text('E-mail'),
+                            labelStyle: TextStyle(color: Colors.green),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          controller: fone1Controller,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            label: Text('Telefone 1'),
+                            labelStyle: TextStyle(color: Colors.green),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          controller: fone2Controller,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            label: Text('Telefone 2'),
+                            labelStyle: TextStyle(color: Colors.green),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  // Fazer o insert no banco
+                                  print(idNovoCliente+1);
+                                  print('ID DO CLIENTE CADASTRADO');
+                                  final Map<String, dynamic> map = {
+                                    // CRIAR TABELA t_cliente_novo
+                                    idCliColumn: idNovoCliente+1,
+                                    cliDocColumn: cnpjController.text,
+                                    cliRazaoColumn: razaoController.text,
+                                    cliFantasiaColumn: fantasiaController.text,
+                                    cliCepColumn: cepController.text,
+                                    cliRuaColumn: ruaController.text,
+                                    cliNumColumn: numeroController.text,
+                                    cliBairroColumn: bairroController.text,
+                                    cliCidadeColumn: municipioController.text,
+                                    cliUfColumn: ufController.text,
+                                    cliEmailColumn: emailController.text,
+                                    cliFone1Column: fone1Controller.text,
+                                    cliFone2Column: fone2Controller.text,
+                                  };
+                                  helper.saveClienteNovo(map);
+                                  print(map);
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text(
+                                        'Cliente cadastrado com Sucesso!',
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                            tipoCadastro = 'fisica';
+                                            cnpjController.text = '';
+                                            razaoController.text = '';
+                                            fantasiaController.text = '';
+                                            cepController.text = '';
+                                            bairroController.text = '';
+                                            ruaController.text = '';
+                                            numeroController.text = '';
+                                            municipioController.text = '';
+                                            ufController.text = '';
+                                            emailController.text = '';
+                                            fone1Controller.text = '';
+                                            fone2Controller.text = '';
+                                            setState(() {
+                                              montaTela();
+                                            });
+                                          },
+                                          child: Text(
+                                            'OK',
+                                            style: TextStyle(color: Colors.black),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                  child: Text(
+                                    'Salvar',
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
+                    /*TextFormField(
                     keyboardType: TextInputType.number,
+                    controller: cpfController,
                     validator: (value) {},
                     decoration: InputDecoration(
                       labelText: 'CPF',
@@ -188,222 +501,14 @@ class _NovoClienteState extends State<NovoCliente> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.name,
-                    decoration: InputDecoration(
-                      label: Text('Nome'),
-                      labelStyle: TextStyle(color: Colors.green),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.name,
-                    decoration: InputDecoration(
-                      label: Text('Apelido / Nome Fantasia'),
-                      labelStyle: TextStyle(color: Colors.green),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            label: Text('CEP'),
-                            labelStyle: TextStyle(color: Colors.green),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Expanded(
-                        flex: 6,
-                        child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          decoration: InputDecoration(
-                            label: Text('Bairro'),
-                            labelStyle: TextStyle(color: Colors.green),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 8,
-                        child: TextFormField(
-                          keyboardType: TextInputType.streetAddress,
-                          decoration: InputDecoration(
-                            label: Text('Rua'),
-                            labelStyle: TextStyle(color: Colors.green),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            label: Text('Nº'),
-                            labelStyle: TextStyle(color: Colors.green),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 8,
-                        child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          decoration: InputDecoration(
-                            label: Text('Município'),
-                            labelStyle: TextStyle(color: Colors.green),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(2),
-                          ],
-                          decoration: InputDecoration(
-                            label: Text('UF'),
-                            labelStyle: TextStyle(color: Colors.green),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      label: Text('E-mail'),
-                      labelStyle: TextStyle(color: Colors.green),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      label: Text('Telefone 1'),
-                      labelStyle: TextStyle(color: Colors.green),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      label: Text('Telefone 2'),
-                      labelStyle: TextStyle(color: Colors.green),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                            child: Text(
-                              'Salvar',
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                ],
-              ),
-              /*TextFormField(
-                keyboardType: TextInputType.number,
-                controller: cpfController,
-                validator: (value) {},
-                decoration: InputDecoration(
-                  labelText: 'CPF',
-                  labelStyle: TextStyle(color: Colors.green),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                  ),*/
+                  ],
                 ),
-              ),*/
-            ],
-          ),
-        ),
+              ),
+            );
+          }
+          return Center(child: const CircularProgressIndicator());
+        }
       );
     } else if (tipoCadastro == 'juridica') {
       return Form(
@@ -519,6 +624,17 @@ class _NovoClienteState extends State<NovoCliente> {
               Navigator.of(context).pop();
               tipoCadastro = texto;
               cnpjController.text = '';
+              razaoController.text = '';
+              fantasiaController.text = '';
+              cepController.text = '';
+              bairroController.text = '';
+              ruaController.text = '';
+              numeroController.text = '';
+              municipioController.text = '';
+              ufController.text = '';
+              emailController.text = '';
+              fone1Controller.text = '';
+              fone2Controller.text = '';
               setState(() {
                 montaTela();
               });

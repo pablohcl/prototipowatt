@@ -1,4 +1,5 @@
 final String idCliColumn = "id";
+final String cliDocColumn = "documento";
 final String cliRazaoColumn = "razao";
 final String cliFantasiaColumn = "fantasia";
 final String cliCepColumn = "cep";
@@ -12,6 +13,7 @@ final String cliFone1Column = "fone1";
 final String cliFone2Column = "fone2";
 
 class Cliente {
+  final int id;
   final String documento;
   final String razao;
   final String fantasia;
@@ -26,6 +28,7 @@ class Cliente {
   final String fone2;
 
   const Cliente({
+    required this.id,
     required this.documento,
     required this.razao,
     required this.fantasia,
@@ -42,6 +45,7 @@ class Cliente {
 
   factory Cliente.fromJson(Map<String, dynamic> json) {
     return Cliente(
+      id: json['id'] as int,
       documento: json['cnpj'] as String,
       razao: json['nome'] as String,
       fantasia: json['fantasia'] as String,
@@ -59,6 +63,7 @@ class Cliente {
 
   factory Cliente.fromTxt(Map<String, dynamic> txt) {
     return Cliente(
+      id: txt['id'] as int,
       documento: txt['cnpj'] as String,
       razao: txt['nome'] as String,
       fantasia: txt['fantasia'] as String,
@@ -76,6 +81,7 @@ class Cliente {
 
   factory Cliente.fromMap(Map<dynamic, dynamic> txt) {
     return Cliente(
+      id: txt['id'] as int,
       documento: txt['cnpj'] as String,
       razao: txt['nome'] as String,
       fantasia: txt['fantasia'] as String,
@@ -93,7 +99,8 @@ class Cliente {
 
   Map<String, dynamic> toMap() {
     return {
-      idCliColumn : documento,
+      idCliColumn: id,
+      cliDocColumn : documento,
       cliRazaoColumn : razao,
       cliFantasiaColumn : fantasia,
       cliCepColumn : cep,

@@ -3,6 +3,7 @@ import 'package:prototipo/objects/cliente.dart';
 import 'package:prototipo/objects/prod_vlr.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'cliente_novo.dart';
 import 'produto.dart';
 import 'cond_pgto.dart';
 
@@ -10,11 +11,13 @@ final String tabelaProduto = "t_produto";
 final String tabelaCondicoes = "t_condicoes";
 final String tabelaValores = "t_prod_valores";
 final String tabelaClientes = "t_clientes";
+final String tabelaClienteNovo = "t_cliente_novo";
 
 final String dropTableProdutos = "DROP TABLE IF EXISTS $tabelaProduto";
 final String dropTableCondicoes = "DROP TABLE IF EXISTS $tabelaCondicoes";
 final String dropTableValores = "DROP TABLE IF EXISTS $tabelaValores";
 final String dropTableClientes = "DROP TABLE IF EXISTS $tabelaClientes";
+final String dropTableClienteNovo = "DROP TABLE IF EXISTS $tabelaClienteNovo";
 
 final String createTableProdutos =
     "CREATE TABLE $tabelaProduto($idColumn INT PRIMARY KEY, $refColumn TEXT, $descColumn TEXT, $undColumn TEXT, $grupoColumn INT)";
@@ -24,6 +27,8 @@ final String createTableValores =
     "CREATE TABLE $tabelaValores($idVlrColumn INT PRIMARY KEY, $vCompraColumn DECIMAL, $vMinColumn DECIMAL, $vendaColumn DECIMAL, $sugColumn DECIMAL)";
 final String createTableClientes =
     "CREATE TABLE $tabelaClientes($idCliColumn INT PRIMARY KEY, $cliRazaoColumn TEXT, $cliFantasiaColumn TEXT, $cliCepColumn TEXT, $cliRuaColumn TEXT, $cliNumColumn TEXT, $cliBairroColumn TEXT, $cliCidadeColumn TEXT, $cliUfColumn TEXT, $cliEmailColumn TEXT, $cliFone1Column TEXT, $cliFone2Column TEXT)";
+final String createTableClienteNovo =
+    "CREATE TABLE $tabelaClienteNovo($idCliColumn INT PRIMARY KEY, $cliDocColumn TEXT, $cliRazaoColumn TEXT, $cliFantasiaColumn TEXT, $cliCepColumn TEXT, $cliRuaColumn TEXT, $cliNumColumn TEXT, $cliBairroColumn TEXT, $cliCidadeColumn TEXT, $cliUfColumn TEXT, $cliEmailColumn TEXT, $cliFone1Column TEXT, $cliFone2Column TEXT)";
 
 class DbHelper {
   static final DbHelper _instance = DbHelper.internal();
@@ -56,6 +61,7 @@ class DbHelper {
         await db.execute(createTableCondicoes);
         await db.execute(createTableValores);
         await db.execute(createTableClientes);
+        await db.execute(createTableClienteNovo);
       },
     );
   }
@@ -74,6 +80,22 @@ class DbHelper {
     } else if (table == 'clientes') {
       await dbProd!.execute(dropTableClientes);
       await dbProd.execute(createTableClientes);
+    } else if (table == 'cliente-novo') {
+      await dbProd!.execute(dropTableClienteNovo);
+      await dbProd.execute(createTableClienteNovo);
+    }
+  }
+
+  Future<int> getLastId(String table, String coluna) async {
+    Database? dbProd = await db;
+    List<Map> maps = await dbProd!
+        .rawQuery("SELECT * FROM $table ORDER BY $coluna DESC");
+
+    if (maps.isNotEmpty) {
+      print(maps.toString());
+      return maps.first[idCliColumn];
+    } else {
+      return 0;
     }
   }
 
@@ -120,6 +142,12 @@ class DbHelper {
     }
 
     return await batch.commit();
+  }
+
+  Future<void> saveClienteNovo(Map<String, dynamic> novoCli) async {
+    Database? dbProd = await db;
+
+    dbProd!.insert(tabelaClienteNovo, novoCli);
   }
 
   Future<List<dynamic>> saveValores(List<List<dynamic>> listValores) async {
@@ -189,7 +217,7 @@ class DbHelper {
       return Cliente.fromMap(maps.first);
     } else {
       return new Cliente(
-          documento: 'null', razao: "null", fantasia: "null", cep: "null", rua: 'null', numero: 'null', bairro: 'null', cidade: 'null', uf: 'null', email: 'null', fone1: 'null', fone2: 'null');
+          id: 0, documento: 'null', razao: "null", fantasia: "null", cep: "null", rua: 'null', numero: 'null', bairro: 'null', cidade: 'null', uf: 'null', email: 'null', fone1: 'null', fone2: 'null');
     }
   }
 
@@ -241,6 +269,20 @@ class DbHelper {
       listMap.length,
           (index) {
         return Cliente.fromMap(listMap[index]);
+      },
+      growable: true,
+    );
+
+    return listCli;
+  }
+
+  Future<List<ClienteNovo>> getTodosClientesNovos() async {
+    Database? dbProd = await db;
+    List listMap = await dbProd!.rawQuery("SELECT * FROM $tabelaClienteNovo");
+    List<ClienteNovo> listCli = List.generate(
+      listMap.length,
+          (index) {
+        return ClienteNovo.fromMap(listMap[index]);
       },
       growable: true,
     );
