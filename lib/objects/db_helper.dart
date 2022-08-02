@@ -26,9 +26,9 @@ final String createTableCondicoes =
 final String createTableValores =
     "CREATE TABLE $tabelaValores($idVlrColumn INT PRIMARY KEY, $vCompraColumn DECIMAL, $vMinColumn DECIMAL, $vendaColumn DECIMAL, $sugColumn DECIMAL)";
 final String createTableClientes =
-    "CREATE TABLE $tabelaClientes($idCliColumn INT PRIMARY KEY, $cliRazaoColumn TEXT, $cliFantasiaColumn TEXT, $cliCepColumn TEXT, $cliRuaColumn TEXT, $cliNumColumn TEXT, $cliBairroColumn TEXT, $cliCidadeColumn TEXT, $cliUfColumn TEXT, $cliEmailColumn TEXT, $cliFone1Column TEXT, $cliFone2Column TEXT)";
+    "CREATE TABLE $tabelaClientes($idCliColumn INT PRIMARY KEY, $cliRazaoColumn TEXT, $cliFantasiaColumn TEXT, $cliDocColumn TEXT, $cliInscrColumn TEXT, $cliCepColumn TEXT, $cliRuaColumn TEXT, $cliNumColumn TEXT, $cliBairroColumn TEXT, $cliCidadeColumn TEXT, $cliUfColumn TEXT, $cliEmailColumn TEXT, $cliFone1Column TEXT, $cliFone2Column TEXT)";
 final String createTableClienteNovo =
-    "CREATE TABLE $tabelaClienteNovo($idCliColumn INT PRIMARY KEY, $cliDocColumn TEXT, $cliRazaoColumn TEXT, $cliFantasiaColumn TEXT, $cliCepColumn TEXT, $cliRuaColumn TEXT, $cliNumColumn TEXT, $cliBairroColumn TEXT, $cliCidadeColumn TEXT, $cliUfColumn TEXT, $cliEmailColumn TEXT, $cliFone1Column TEXT, $cliFone2Column TEXT)";
+    "CREATE TABLE $tabelaClienteNovo($idCliColumn INT PRIMARY KEY, $cliRazaoColumn TEXT, $cliFantasiaColumn TEXT, $cliDocColumn TEXT, $cliInscrColumn TEXT, $cliCepColumn TEXT, $cliRuaColumn TEXT, $cliNumColumn TEXT, $cliBairroColumn TEXT, $cliCidadeColumn TEXT, $cliUfColumn TEXT, $cliEmailColumn TEXT, $cliFone1Column TEXT, $cliFone2Column TEXT)";
 
 class DbHelper {
   static final DbHelper _instance = DbHelper.internal();
@@ -127,15 +127,17 @@ class DbHelper {
         idCliColumn: linha[0].substring(1),
         cliRazaoColumn: linha[1],
         cliFantasiaColumn: linha[2],
-        cliCepColumn: linha[3],
-        cliRuaColumn: linha[4],
-        cliNumColumn: linha[5],
-        cliBairroColumn: linha[6],
-        cliCidadeColumn: linha[7],
-        cliUfColumn: linha[8],
-        cliEmailColumn: linha[9],
-        cliFone1Column: linha[10],
-        cliFone2Column: linha[11],
+        cliDocColumn: linha[3],
+        cliInscrColumn: linha [4],
+        cliCepColumn: linha[5],
+        cliRuaColumn: linha[6],
+        cliNumColumn: linha[7],
+        cliBairroColumn: linha[8],
+        cliCidadeColumn: linha[9],
+        cliUfColumn: linha[10],
+        cliEmailColumn: linha[11],
+        cliFone1Column: linha[12],
+        cliFone2Column: linha[13],
       };
 
       batch.insert(tabelaClientes, map);
@@ -217,7 +219,7 @@ class DbHelper {
       return Cliente.fromMap(maps.first);
     } else {
       return new Cliente(
-          id: 0, documento: 'null', razao: "null", fantasia: "null", cep: "null", rua: 'null', numero: 'null', bairro: 'null', cidade: 'null', uf: 'null', email: 'null', fone1: 'null', fone2: 'null');
+          id: 0, documento: 'null', razao: "null", fantasia: "null", inscrEstadual: 'null', cep: "null", rua: 'null', numero: 'null', bairro: 'null', cidade: 'null', uf: 'null', email: 'null', fone1: 'null', fone2: 'null');
     }
   }
 

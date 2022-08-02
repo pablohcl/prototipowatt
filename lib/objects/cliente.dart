@@ -1,7 +1,8 @@
 final String idCliColumn = "id";
-final String cliDocColumn = "documento";
 final String cliRazaoColumn = "razao";
 final String cliFantasiaColumn = "fantasia";
+final String cliDocColumn = "documento";
+final String cliInscrColumn = "inscricao";
 final String cliCepColumn = "cep";
 final String cliRuaColumn = "rua";
 final String cliNumColumn = "numero";
@@ -14,9 +15,10 @@ final String cliFone2Column = "fone2";
 
 class Cliente {
   final int id;
-  final String documento;
   final String razao;
   final String fantasia;
+  final String documento;
+  final String inscrEstadual;
   final String cep;
   final String rua;
   final String numero;
@@ -29,9 +31,10 @@ class Cliente {
 
   const Cliente({
     required this.id,
-    required this.documento,
     required this.razao,
     required this.fantasia,
+    required this.documento,
+    required this.inscrEstadual,
     required this.cep,
     required this.rua,
     required this.numero,
@@ -46,9 +49,10 @@ class Cliente {
   factory Cliente.fromJson(Map<String, dynamic> json) {
     return Cliente(
       id: json['id'] as int,
-      documento: json['cnpj'] as String,
       razao: json['nome'] as String,
       fantasia: json['fantasia'] as String,
+      documento: json['cnpj'] as String,
+      inscrEstadual: json['inscricao'] as String,
       cep: json['cep'] as String,
       rua: json['logradouro'] as String,
       numero: json['numero'] as String,
@@ -64,9 +68,10 @@ class Cliente {
   factory Cliente.fromTxt(Map<String, dynamic> txt) {
     return Cliente(
       id: txt['id'] as int,
-      documento: txt['cnpj'] as String,
       razao: txt['nome'] as String,
       fantasia: txt['fantasia'] as String,
+      documento: txt['cnpj'] as String,
+      inscrEstadual: txt['inscricao'] as String,
       cep: txt['cep'] as String,
       rua: txt['logradouro'] as String,
       numero: txt['numero'] as String,
@@ -82,9 +87,10 @@ class Cliente {
   factory Cliente.fromMap(Map<dynamic, dynamic> txt) {
     return Cliente(
       id: txt['id'] as int,
-      documento: txt['cnpj'] as String,
       razao: txt['nome'] as String,
       fantasia: txt['fantasia'] as String,
+      documento: txt['cnpj'] as String,
+      inscrEstadual: txt['inscricao'] as String,
       cep: txt['cep'] as String,
       rua: txt['logradouro'] as String,
       numero: txt['numero'] as String,
@@ -100,9 +106,10 @@ class Cliente {
   Map<String, dynamic> toMap() {
     return {
       idCliColumn: id,
-      cliDocColumn : documento,
       cliRazaoColumn : razao,
       cliFantasiaColumn : fantasia,
+      cliDocColumn : documento,
+      cliInscrColumn : inscrEstadual,
       cliCepColumn : cep,
       cliRuaColumn : rua,
       cliNumColumn : numero,

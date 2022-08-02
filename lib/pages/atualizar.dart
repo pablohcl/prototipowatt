@@ -9,6 +9,8 @@ import 'package:prototipo/objects/produto.dart';
 import 'package:prototipo/objects/db_helper.dart';
 import 'package:csv/csv.dart';
 
+import '../objects/cliente.dart';
+
 
 
 class Atualizar extends StatefulWidget {
@@ -23,9 +25,11 @@ class _AtualizarState extends State<Atualizar> {
   late Future<List<dynamic>> futureProdList;
   late Future<List<dynamic>> futureCondList;
   late Future<List<dynamic>> futureProdVlrList;
+  late Future<List<dynamic>> futureCliList;
   late List? produtos;
   late List? condicoes;
   late List? valores;
+  late List? clientes;
 
   DbHelper helper = DbHelper();
 
@@ -81,6 +85,19 @@ class _AtualizarState extends State<Atualizar> {
                 return Center(child: const CircularProgressIndicator());
               },
             ),
+            FutureBuilder<List<dynamic>>(
+              future: futureCliList,
+              builder: (context, snapshot){
+                if(snapshot.hasError){
+                  return Text('${snapshot.error}');
+                } else if(snapshot.hasData){
+                  clientes = snapshot.data;
+                  return Text(clientes!.length.toString()+' Registros atualizados');
+                }
+
+                return Center(child: const CircularProgressIndicator());
+              },
+            ),
           ],
         ),
       ),
@@ -93,6 +110,7 @@ class _AtualizarState extends State<Atualizar> {
     futureProdList = fetchProdutos();
     futureCondList = fetchCondicoes();
     futureProdVlrList = fetchValores();
+    futureCliList = fetchClientes();
   }
 
   Future<List<dynamic>> fetchProdutos() async {
@@ -105,6 +123,24 @@ class _AtualizarState extends State<Atualizar> {
       await helper.recreateTable('produtos');
       await helper.saveProdutos(rowsAsListOfValues);
       Future<List<Produto>> l = helper.getTodosProdutos();
+      l.then((value) => print(value.length));
+
+      return rowsAsListOfValues;
+    } else {
+      throw Exception('Falha ao carregar dados');
+    }
+  }
+
+  Future<List<dynamic>> fetchClientes() async {
+    final response = await http.get(Uri.parse(
+        'https://pablohenriquecorrea.000webhostapp.com/mobile/t_cliente.CSV'));
+
+    if (response.statusCode == 200) {
+      final List<List<dynamic>> rowsAsListOfValues = CsvToListConverter().convert(response.body);
+
+      await helper.recreateTable('clientes');
+      await helper.saveClientes(rowsAsListOfValues);
+      Future<List<Cliente>> l = helper.getTodosClientes();
       l.then((value) => print(value.length));
 
       return rowsAsListOfValues;
