@@ -11,9 +11,10 @@ class ClienteNovo {
   final String novoBairro;
   final String novoCidade;
   final String novoUf;
-  final String novoEmail;
+  final String novoDdd;
   final String novoFone1;
-  final String novoFone2;
+  final String novoPj;
+  final String novoEmail;
 
   const ClienteNovo({
     required this.novoId,
@@ -26,9 +27,10 @@ class ClienteNovo {
     required this.novoBairro,
     required this.novoCidade,
     required this.novoUf,
-    required this.novoEmail,
+    required this.novoDdd,
     required this.novoFone1,
-    required this.novoFone2,
+    required this.novoPj,
+    required this.novoEmail,
   });
 
   factory ClienteNovo.fromJson(Map<String, dynamic> json) {
@@ -43,9 +45,10 @@ class ClienteNovo {
       novoBairro: json['bairro'] as String,
       novoCidade: json['municipio'] as String,
       novoUf: json['uf'] as String,
-      novoEmail: json['email'] as String,
+      novoDdd: json['ddd'] as String,
       novoFone1: json['telefone'] as String,
-      novoFone2: json['telefone2'] as String,
+      novoPj: json['pj'] as String,
+      novoEmail: json['email'] as String,
     );
   }
 
@@ -61,9 +64,10 @@ class ClienteNovo {
       novoBairro: txt['bairro'] as String,
       novoCidade: txt['municipio'] as String,
       novoUf: txt['uf'] as String,
-      novoEmail: txt['email'] as String,
+      novoDdd: txt['ddd'] as String,
       novoFone1: txt['telefone'] as String,
-      novoFone2: txt['telefone2'] as String,
+      novoPj: txt['pj'] as String,
+      novoEmail: txt['email'] as String,
     );
   }
 
@@ -79,9 +83,10 @@ class ClienteNovo {
       novoBairro: txt['bairro'] as String,
       novoCidade: txt['municipio'] as String,
       novoUf: txt['uf'] as String,
-      novoEmail: txt['email'] as String,
+      novoDdd: txt['ddd'] as String,
       novoFone1: txt['telefone'] as String,
-      novoFone2: txt['telefone2'] as String,
+      novoPj: txt['pj'] as String,
+      novoEmail: txt['email'] as String,
     );
   }
 
@@ -97,9 +102,10 @@ class ClienteNovo {
       cliBairroColumn : novoBairro,
       cliCidadeColumn : novoCidade,
       cliUfColumn : novoUf,
-      cliEmailColumn : novoEmail,
+      cliDDDColumn : novoDdd,
       cliFone1Column : novoFone1,
-      cliFone2Column : novoFone2,
+      cliPjColumn : novoPj,
+      cliEmailColumn : novoEmail,
     };
   }
 }

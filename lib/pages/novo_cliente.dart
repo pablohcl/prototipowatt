@@ -41,9 +41,9 @@ class _NovoClienteState extends State<NovoCliente> {
   late TextEditingController numeroController = TextEditingController();
   late TextEditingController municipioController = TextEditingController();
   late TextEditingController ufController = TextEditingController();
-  late TextEditingController emailController = TextEditingController();
+  late TextEditingController dddController = TextEditingController();
   late TextEditingController fone1Controller = TextEditingController();
-  late TextEditingController fone2Controller = TextEditingController();
+  late TextEditingController emailController = TextEditingController();
 
   late Future<Cliente> futureCli;
 
@@ -369,39 +369,46 @@ class _NovoClienteState extends State<NovoCliente> {
                         SizedBox(
                           height: 10,
                         ),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: TextFormField(
+                                controller: dddController,
+                                keyboardType: TextInputType.text,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(2),
+                                ],
+                                decoration: InputDecoration(
+                                  label: Text('DDD'),
+                                  labelStyle: TextStyle(color: Colors.green),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 8,
+                              child: TextFormField(
+                                controller: fone1Controller,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  label: Text('Telefone 1'),
+                                  labelStyle: TextStyle(color: Colors.green),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                         TextFormField(
                           controller: emailController,
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             label: Text('E-mail'),
-                            labelStyle: TextStyle(color: Colors.green),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextFormField(
-                          controller: fone1Controller,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            label: Text('Telefone 1'),
-                            labelStyle: TextStyle(color: Colors.green),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextFormField(
-                          controller: fone2Controller,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            label: Text('Telefone 2'),
                             labelStyle: TextStyle(color: Colors.green),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
@@ -431,9 +438,10 @@ class _NovoClienteState extends State<NovoCliente> {
                                     cliBairroColumn: bairroController.text,
                                     cliCidadeColumn: municipioController.text,
                                     cliUfColumn: ufController.text,
-                                    cliEmailColumn: emailController.text,
+                                    cliDDDColumn: dddController.text,
                                     cliFone1Column: fone1Controller.text,
-                                    cliFone2Column: fone2Controller.text,
+                                    cliPjColumn: 'FALSO',
+                                    cliEmailColumn: emailController.text,
                                   };
                                   helper.saveClienteNovo(map);
                                   print(map);
@@ -458,9 +466,9 @@ class _NovoClienteState extends State<NovoCliente> {
                                             numeroController.text = '';
                                             municipioController.text = '';
                                             ufController.text = '';
-                                            emailController.text = '';
+                                            dddController.text = '';
                                             fone1Controller.text = '';
-                                            fone2Controller.text = '';
+                                            emailController.text = '';
                                             setState(() {
                                               montaTela();
                                             });
@@ -632,9 +640,9 @@ class _NovoClienteState extends State<NovoCliente> {
               numeroController.text = '';
               municipioController.text = '';
               ufController.text = '';
-              emailController.text = '';
+              dddController.text = '';
               fone1Controller.text = '';
-              fone2Controller.text = '';
+              emailController.text = '';
               setState(() {
                 montaTela();
               });
@@ -795,34 +803,38 @@ class _NovoClienteState extends State<NovoCliente> {
                 SizedBox(
                   height: 10,
                 ),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: TextFormField(
+                        initialValue: snapshot.data!.ddd,
+                        decoration: InputDecoration(
+                          label: Text('DDD'),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 8,
+                      child: TextFormField(
+                        initialValue: snapshot.data!.fone1,
+                        decoration: InputDecoration(
+                          label: Text('Telefone 1'),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 TextFormField(
                   initialValue: snapshot.data!.email,
                   decoration: InputDecoration(
                     label: Text('E-mail'),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  initialValue: snapshot.data!.fone1,
-                  decoration: InputDecoration(
-                    label: Text('Telefone 1'),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  initialValue: snapshot.data!.fone2,
-                  decoration: InputDecoration(
-                    label: Text('Telefone 2'),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),

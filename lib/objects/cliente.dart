@@ -9,9 +9,11 @@ final String cliNumColumn = "numero";
 final String cliBairroColumn = "bairro";
 final String cliCidadeColumn = "cidade";
 final String cliUfColumn = "uf";
-final String cliEmailColumn = "email";
+final String cliDDDColumn = "ddd";
 final String cliFone1Column = "fone1";
-final String cliFone2Column = "fone2";
+final String cliPjColumn = "pj";
+final String cliEmailColumn = "email";
+
 
 class Cliente {
   final int id;
@@ -25,9 +27,10 @@ class Cliente {
   final String bairro;
   final String cidade;
   final String uf;
-  final String email;
+  final String ddd;
   final String fone1;
-  final String fone2;
+  final String pj;
+  final String email;
 
   const Cliente({
     required this.id,
@@ -41,9 +44,10 @@ class Cliente {
     required this.bairro,
     required this.cidade,
     required this.uf,
-    required this.email,
+    required this.ddd,
     required this.fone1,
-    required this.fone2,
+    required this.pj,
+    required this.email,
   });
 
   factory Cliente.fromJson(Map<String, dynamic> json) {
@@ -59,9 +63,10 @@ class Cliente {
       bairro: json['bairro'] as String,
       cidade: json['municipio'] as String,
       uf: json['uf'] as String,
-      email: json['email'] as String,
+      ddd: json['ddd'] as String,
       fone1: json['telefone'] as String,
-      fone2: '',
+      pj: json['pj'] as String,
+      email: json['email'] as String,
     );
   }
 
@@ -78,9 +83,10 @@ class Cliente {
       bairro: txt['bairro'] as String,
       cidade: txt['municipio'] as String,
       uf: txt['uf'] as String,
-      email: txt['email'] as String,
+      ddd: txt['ddd'] as String,
       fone1: txt['telefone'] as String,
-      fone2: '',
+      pj: txt['pj'] as String,
+      email: txt['email'] as String,
     );
   }
 
@@ -97,9 +103,10 @@ class Cliente {
       bairro: txt['bairro'] as String,
       cidade: txt['municipio'] as String,
       uf: txt['uf'] as String,
-      email: txt['email'] as String,
+      ddd: txt['ddd'] as String,
       fone1: txt['telefone'] as String,
-      fone2: '',
+      pj: txt['pj'] as String,
+      email: txt['email'] as String,
     );
   }
 
@@ -116,9 +123,10 @@ class Cliente {
       cliBairroColumn : bairro,
       cliCidadeColumn : cidade,
       cliUfColumn : uf,
-      cliEmailColumn : email,
+      cliUfColumn : ddd,
       cliFone1Column : fone1,
-      cliFone2Column : fone2,
+      cliPjColumn : pj,
+      cliEmailColumn : email,
     };
   }
 }
