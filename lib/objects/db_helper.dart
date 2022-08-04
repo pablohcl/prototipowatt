@@ -28,7 +28,7 @@ final String createTableValores =
 final String createTableClientes =
     "CREATE TABLE $tabelaClientes($idCliColumn INT PRIMARY KEY, $cliRazaoColumn TEXT, $cliFantasiaColumn TEXT, $cliDocColumn TEXT, $cliInscrColumn TEXT, $cliCepColumn TEXT, $cliRuaColumn TEXT, $cliNumColumn TEXT, $cliBairroColumn TEXT, $cliCidadeColumn TEXT, $cliUfColumn TEXT, $cliDDDColumn TEXT, $cliFone1Column TEXT, $cliPjColumn TEXT, $cliEmailColumn TEXT)";
 final String createTableClienteNovo =
-    "CREATE TABLE $tabelaClienteNovo($idCliColumn INT PRIMARY KEY, $cliRazaoColumn TEXT, $cliFantasiaColumn TEXT, $cliDocColumn TEXT, $cliInscrColumn TEXT, $cliCepColumn TEXT, $cliRuaColumn TEXT, $cliNumColumn TEXT, $cliBairroColumn TEXT, $cliCidadeColumn TEXT, $cliUfColumn TEXT, $cliEmailColumn TEXT, $cliFone1Column TEXT)";
+    "CREATE TABLE $tabelaClienteNovo($idCliColumn INT PRIMARY KEY, $cliRazaoColumn TEXT, $cliFantasiaColumn TEXT, $cliDocColumn TEXT, $cliInscrColumn TEXT, $cliCepColumn TEXT, $cliRuaColumn TEXT, $cliNumColumn TEXT, $cliBairroColumn TEXT, $cliCidadeColumn TEXT, $cliUfColumn TEXT, $cliDDDColumn TEXT, $cliFone1Column TEXT, $cliPjColumn TEXT, $cliEmailColumn TEXT)";
 
 class DbHelper {
   static final DbHelper _instance = DbHelper.internal();
@@ -92,7 +92,7 @@ class DbHelper {
         .rawQuery("SELECT * FROM $table ORDER BY $coluna DESC");
 
     if (maps.isNotEmpty) {
-      print(maps.toString());
+      //print(maps.toString());
       return maps.first[idCliColumn];
     } else {
       return 0;

@@ -388,6 +388,9 @@ class _NovoClienteState extends State<NovoCliente> {
                                 ),
                               ),
                             ),
+                            SizedBox(
+                              width: 8,
+                            ),
                             Expanded(
                               flex: 8,
                               child: TextFormField(
@@ -403,6 +406,9 @@ class _NovoClienteState extends State<NovoCliente> {
                               ),
                             ),
                           ],
+                        ),
+                        SizedBox(
+                          height: 10,
                         ),
                         TextFormField(
                           controller: emailController,
@@ -444,7 +450,7 @@ class _NovoClienteState extends State<NovoCliente> {
                                     cliEmailColumn: emailController.text,
                                   };
                                   helper.saveClienteNovo(map);
-                                  print(map);
+                                  //print(map);
                                   showDialog(
                                     context: context,
                                     builder: (context) => AlertDialog(
