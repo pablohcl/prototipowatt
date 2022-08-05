@@ -208,7 +208,9 @@ class _NovoClienteState extends State<NovoCliente> {
                             LengthLimitingTextInputFormatter(11),
                           ],
                           keyboardType: TextInputType.number,
-                          validator: (value) {},
+                          validator: (value) {
+                            return value!.length != 11 ? 'CPF inválido!' : null;
+                          },
                           controller: cnpjController,
                           decoration: InputDecoration(
                             labelText: 'CPF',

@@ -92,7 +92,7 @@ class DbHelper {
         .rawQuery("SELECT * FROM $table ORDER BY $coluna DESC");
 
     if (maps.isNotEmpty) {
-      //print(maps.toString());
+      print(maps.toString());
       return maps.first[idCliColumn];
     } else {
       return 0;
