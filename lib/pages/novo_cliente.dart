@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:prototipo/objects/cliente.dart';
 import 'package:prototipo/objects/db_helper.dart';
 
-import '../objects/cliente_novo.dart';
 
 Future<Cliente> fetchDados(String cnpj) async {
   final response =
@@ -44,10 +43,27 @@ class _NovoClienteState extends State<NovoCliente> {
   late TextEditingController dddController = TextEditingController();
   late TextEditingController fone1Controller = TextEditingController();
   late TextEditingController emailController = TextEditingController();
+  late TextEditingController inscrController = TextEditingController();
 
   late Future<Cliente> futureCli;
 
   late int idNovoCliente;
+
+  final _cpfFocus = FocusNode();
+  final _emailFocus = FocusNode();
+  final _nomeFocus = FocusNode();
+  final _apelidoFocus = FocusNode();
+  final _cepFocus = FocusNode();
+  final _bairroFocus = FocusNode();
+  final _ruaFocus = FocusNode();
+  final _numFocus = FocusNode();
+  final _cidadeFocus = FocusNode();
+  final _ufFocus = FocusNode();
+  final _dddFocus = FocusNode();
+  final _fone1Focus = FocusNode();
+  final _inscrFocus = FocusNode();
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -157,23 +173,21 @@ class _NovoClienteState extends State<NovoCliente> {
 
   Widget montaTela() {
     if (tipoCadastro == '') {
-      return Form(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'Selecione o tipo',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.green,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Selecione o tipo',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.green,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
     } else if (tipoCadastro == 'fisica') {
@@ -185,6 +199,7 @@ class _NovoClienteState extends State<NovoCliente> {
           } else if(snapshot.hasData){
             idNovoCliente = int.parse(snapshot.data.toString());
             return Form(
+              key: _formKey,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
                 child: Column(
@@ -207,9 +222,15 @@ class _NovoClienteState extends State<NovoCliente> {
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(11),
                           ],
+                          focusNode: _cpfFocus,
                           keyboardType: TextInputType.number,
                           validator: (value) {
-                            return value!.length != 11 ? 'CPF inválido!' : null;
+                            if(value!.length != 11){
+                              FocusScope.of(context).requestFocus(_cpfFocus);
+                              return 'CPF inválido!';
+                            } else {
+                              return null;
+                            }
                           },
                           controller: cnpjController,
                           decoration: InputDecoration(
@@ -224,6 +245,41 @@ class _NovoClienteState extends State<NovoCliente> {
                           height: 10,
                         ),
                         TextFormField(
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(10),
+                            UpperCaseTextFormatter(),
+                          ],
+                          focusNode: _inscrFocus,
+                          validator: (value) {
+                            if(value!.length != 10 && !value.contains('ISENTO')){
+                              FocusScope.of(context).requestFocus(_cpfFocus);
+                              return 'Inscrição estadual inválida!';
+                            } else {
+                              return null;
+                            }
+                          },
+                          controller: inscrController,
+                          decoration: InputDecoration(
+                            labelText: 'Inscrição estadual',
+                            labelStyle: TextStyle(color: Colors.green),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          validator: (value) {
+                            if(value!.isEmpty){
+                              FocusScope.of(context).requestFocus(_nomeFocus);
+                              return 'Preencha o nome!';
+                            } else {
+                              return null;
+                            }
+                          },
+                          focusNode: _nomeFocus,
                           controller: razaoController,
                           keyboardType: TextInputType.name,
                           decoration: InputDecoration(
@@ -238,6 +294,15 @@ class _NovoClienteState extends State<NovoCliente> {
                           height: 10,
                         ),
                         TextFormField(
+                          validator: (value) {
+                            if(value!.isEmpty){
+                              FocusScope.of(context).requestFocus(_apelidoFocus);
+                              return 'Campo obrigatório!';
+                            } else {
+                              return null;
+                            }
+                          },
+                          focusNode: _apelidoFocus,
                           controller: fantasiaController,
                           keyboardType: TextInputType.name,
                           decoration: InputDecoration(
@@ -256,6 +321,15 @@ class _NovoClienteState extends State<NovoCliente> {
                             Expanded(
                               flex: 3,
                               child: TextFormField(
+                                focusNode: _cepFocus,
+                                validator: (value){
+                                  if(value!.length != 8){
+                                    FocusScope.of(context).requestFocus(_cepFocus);
+                                    return 'CEP inválido!';
+                                  } else {
+                                    return null;
+                                  }
+                                },
                                 controller: cepController,
                                 inputFormatters: [
                                   LengthLimitingTextInputFormatter(8),
@@ -276,6 +350,15 @@ class _NovoClienteState extends State<NovoCliente> {
                             Expanded(
                               flex: 6,
                               child: TextFormField(
+                                focusNode: _bairroFocus,
+                                validator: (value){
+                                  if(value!.isEmpty){
+                                    FocusScope.of(context).requestFocus(_bairroFocus);
+                                    return 'Campo obrigatório!';
+                                  } else {
+                                    return null;
+                                  }
+                                },
                                 controller: bairroController,
                                 keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
@@ -297,6 +380,15 @@ class _NovoClienteState extends State<NovoCliente> {
                             Expanded(
                               flex: 8,
                               child: TextFormField(
+                                focusNode: _ruaFocus,
+                                validator: (value){
+                                  if(value!.isEmpty){
+                                    FocusScope.of(context).requestFocus(_ruaFocus);
+                                    return 'Campo obrigatório!';
+                                  } else {
+                                    return null;
+                                  }
+                                },
                                 controller: ruaController,
                                 keyboardType: TextInputType.streetAddress,
                                 decoration: InputDecoration(
@@ -314,6 +406,15 @@ class _NovoClienteState extends State<NovoCliente> {
                             Expanded(
                               flex: 2,
                               child: TextFormField(
+                                focusNode: _numFocus,
+                                validator: (value){
+                                  if(value!.isEmpty){
+                                    FocusScope.of(context).requestFocus(_numFocus);
+                                    return 'Campo obrigatório!';
+                                  } else {
+                                    return null;
+                                  }
+                                },
                                 controller: numeroController,
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
@@ -335,6 +436,15 @@ class _NovoClienteState extends State<NovoCliente> {
                             Expanded(
                               flex: 8,
                               child: TextFormField(
+                                focusNode: _cidadeFocus,
+                                validator: (value){
+                                  if(value!.isEmpty){
+                                    FocusScope.of(context).requestFocus(_cidadeFocus);
+                                    return 'Campo obrigatório!';
+                                  } else {
+                                    return null;
+                                  }
+                                },
                                 controller: municipioController,
                                 keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
@@ -352,6 +462,15 @@ class _NovoClienteState extends State<NovoCliente> {
                             Expanded(
                               flex: 2,
                               child: TextFormField(
+                                focusNode: _ufFocus,
+                                validator: (value){
+                                  if(value!.length != 2){
+                                    FocusScope.of(context).requestFocus(_ufFocus);
+                                    return 'UF inválida!';
+                                  } else {
+                                    return null;
+                                  }
+                                },
                                 controller: ufController,
                                 keyboardType: TextInputType.text,
                                 inputFormatters: [
@@ -376,6 +495,15 @@ class _NovoClienteState extends State<NovoCliente> {
                             Expanded(
                               flex: 2,
                               child: TextFormField(
+                                focusNode: _dddFocus,
+                                validator: (value){
+                                  if(value!.length != 2){
+                                    FocusScope.of(context).requestFocus(_dddFocus);
+                                    return 'Campo obrigatório!';
+                                  } else {
+                                    return null;
+                                  }
+                                },
                                 controller: dddController,
                                 keyboardType: TextInputType.text,
                                 inputFormatters: [
@@ -396,6 +524,15 @@ class _NovoClienteState extends State<NovoCliente> {
                             Expanded(
                               flex: 8,
                               child: TextFormField(
+                                focusNode: _fone1Focus,
+                                validator: (value){
+                                  if(value!.length < 8){
+                                    FocusScope.of(context).requestFocus(_fone1Focus);
+                                    return 'Telefone inválido!';
+                                  } else {
+                                    return null;
+                                  }
+                                },
                                 controller: fone1Controller,
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
@@ -413,6 +550,14 @@ class _NovoClienteState extends State<NovoCliente> {
                           height: 10,
                         ),
                         TextFormField(
+                          validator: (value) {
+                            if(value!.contains('@')){
+                              return null;
+                            } else {
+                              FocusScope.of(context).requestFocus(_emailFocus);
+                              return 'E-mail inválido!';
+                            }
+                          },
                           controller: emailController,
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
@@ -431,64 +576,68 @@ class _NovoClienteState extends State<NovoCliente> {
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () {
-                                  // Fazer o insert no banco
-                                  print(idNovoCliente+1);
-                                  print('ID DO CLIENTE CADASTRADO');
-                                  final Map<String, dynamic> map = {
-                                    // CRIAR TABELA t_cliente_novo
-                                    idCliColumn: idNovoCliente+1,
-                                    cliDocColumn: cnpjController.text,
-                                    cliRazaoColumn: razaoController.text,
-                                    cliFantasiaColumn: fantasiaController.text,
-                                    cliCepColumn: cepController.text,
-                                    cliRuaColumn: ruaController.text,
-                                    cliNumColumn: numeroController.text,
-                                    cliBairroColumn: bairroController.text,
-                                    cliCidadeColumn: municipioController.text,
-                                    cliUfColumn: ufController.text,
-                                    cliDDDColumn: dddController.text,
-                                    cliFone1Column: fone1Controller.text,
-                                    cliPjColumn: 'FALSO',
-                                    cliEmailColumn: emailController.text,
-                                  };
-                                  helper.saveClienteNovo(map);
-                                  //print(map);
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: Text(
-                                        'Cliente cadastrado com Sucesso!',
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                            tipoCadastro = 'fisica';
-                                            cnpjController.text = '';
-                                            razaoController.text = '';
-                                            fantasiaController.text = '';
-                                            cepController.text = '';
-                                            bairroController.text = '';
-                                            ruaController.text = '';
-                                            numeroController.text = '';
-                                            municipioController.text = '';
-                                            ufController.text = '';
-                                            dddController.text = '';
-                                            fone1Controller.text = '';
-                                            emailController.text = '';
-                                            setState(() {
-                                              montaTela();
-                                            });
-                                          },
-                                          child: Text(
-                                            'OK',
-                                            style: TextStyle(color: Colors.black),
-                                          ),
+                                  if(_formKey.currentState!.validate()){
+                                    print(idNovoCliente+1);
+                                    print('ID DO CLIENTE CADASTRADO');
+                                    final Map<String, dynamic> map = {
+                                      // CRIAR TABELA t_cliente_novo
+                                      idCliColumn: idNovoCliente+1,
+                                      cliDocColumn: cnpjController.text,
+                                      cliInscrColumn: inscrController.text,
+                                      cliRazaoColumn: razaoController.text,
+                                      cliFantasiaColumn: fantasiaController.text,
+                                      cliCepColumn: cepController.text,
+                                      cliRuaColumn: ruaController.text,
+                                      cliNumColumn: numeroController.text,
+                                      cliBairroColumn: bairroController.text,
+                                      cliCidadeColumn: municipioController.text,
+                                      cliUfColumn: ufController.text,
+                                      cliDDDColumn: dddController.text,
+                                      cliFone1Column: fone1Controller.text,
+                                      cliPjColumn: 'FALSO',
+                                      cliEmailColumn: emailController.text,
+                                    };
+                                    helper.saveClienteNovo(map);
+                                    //print(map);
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: Text(
+                                          'Cliente cadastrado com Sucesso!',
+                                          style: TextStyle(color: Colors.black),
                                         ),
-                                      ],
-                                    ),
-                                  );
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              _formKey.currentState!.reset();
+                                              Navigator.of(context).pop();
+                                              tipoCadastro = 'fisica';
+                                              cnpjController.text = '';
+                                              inscrController.text = '';
+                                              razaoController.text = '';
+                                              fantasiaController.text = '';
+                                              cepController.text = '';
+                                              bairroController.text = '';
+                                              ruaController.text = '';
+                                              numeroController.text = '';
+                                              municipioController.text = '';
+                                              ufController.text = '';
+                                              dddController.text = '';
+                                              fone1Controller.text = '';
+                                              emailController.text = '';
+                                              setState(() {
+                                                montaTela();
+                                              });
+                                            },
+                                            child: Text(
+                                              'OK',
+                                              style: TextStyle(color: Colors.black),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  };
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -528,6 +677,7 @@ class _NovoClienteState extends State<NovoCliente> {
       );
     } else if (tipoCadastro == 'juridica') {
       return Form(
+        key: _formKey,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Column(
@@ -640,6 +790,7 @@ class _NovoClienteState extends State<NovoCliente> {
               Navigator.of(context).pop();
               tipoCadastro = texto;
               cnpjController.text = '';
+              inscrController.text = '';
               razaoController.text = '';
               fantasiaController.text = '';
               cepController.text = '';
@@ -879,5 +1030,15 @@ class _NovoClienteState extends State<NovoCliente> {
         },
       );
     }
+  }
+}
+
+class UpperCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    return TextEditingValue(
+      text: newValue.text.toUpperCase(),
+      selection: newValue.selection,
+    );
   }
 }
