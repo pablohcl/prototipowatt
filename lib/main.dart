@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:prototipo/pages/consulta_cliente.dart';
 import 'package:prototipo/pages/login_screen.dart';
+import 'package:prototipo/pages/view_cliente.dart';
 import 'package:prototipo/pages/view_produto.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'models/user_model.dart';
@@ -48,6 +50,7 @@ class MyApp extends StatelessWidget {
                 home: LoginScreen(),
                 routes: {
                   ViewProduto.routeName: (context) => const ViewProduto(),
+                  ViewCliente.routeName: (context) => const ViewCliente(),
                 },
               ),
             );
@@ -131,19 +134,19 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => NovoCliente()));
+                              builder: (context) => ConsultaCliente()));
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: [
                           Icon(
-                            Icons.person_add,
+                            Icons.person,
                             size: 50,
                             color: Colors.white,
                           ),
                           Text(
-                            'Novo Cliente',
+                            'Clientes',
                             style: TextStyle(color: Colors.white),
                           ),
                         ],
@@ -165,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         children: [
                           Icon(Icons.article, size: 50, color: Colors.white),
-                          Text('Novo Pedido',
+                          Text('Pedidos',
                               style: TextStyle(color: Colors.white)),
                         ],
                       ),

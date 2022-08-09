@@ -221,7 +221,6 @@ class _NovoClienteState extends State<NovoCliente> {
                         TextFormField(
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(14),
-                            CpfTextFormatter(),
                           ],
                           focusNode: _cpfFocus,
                           keyboardType: TextInputType.number,
@@ -1044,6 +1043,7 @@ class UpperCaseTextFormatter extends TextInputFormatter {
   }
 }
 
+// ######### TERMINAR ESSA FUNÇÃO (buga quando tenta apagar os caracteres)
 class CpfTextFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue){

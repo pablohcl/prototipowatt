@@ -123,6 +123,7 @@ class DbHelper {
     var batch = dbProd!.batch();
     for (int i = 1; i < listCli.length; i++) {
       final linha = listCli[i].toString().split(';');
+      print(linha[12]);
       final Map<String, dynamic> map = {
         idCliColumn: linha[0].substring(1),
         cliRazaoColumn: linha[1],
@@ -267,7 +268,7 @@ class DbHelper {
 
   Future<List<Cliente>> getTodosClientes() async {
     Database? dbProd = await db;
-    List listMap = await dbProd!.rawQuery("SELECT * FROM $tabelaProduto");
+    List listMap = await dbProd!.rawQuery("SELECT * FROM $tabelaClientes");
     List<Cliente> listCli = List.generate(
       listMap.length,
           (index) {
