@@ -91,22 +91,16 @@ class _HomePageState extends State<HomePage> {
               PopupMenuButton<Menu>(
                 onSelected: (value) {
                   setState(() {
-                    if (value == Menu.itemOne) {
-                      Navigator.push(
+                    if (value == Menu.itemTwo) {
+                      _auth.signOut();
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ConsultaPreco()));
-                    } else if(value == Menu.itemTwo){
-                      _auth.signOut();
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                              builder: (context) => LoginScreen()));
                     }
                   });
                 },
                 itemBuilder: (context) => <PopupMenuEntry<Menu>>[
-                  PopupMenuItem<Menu>(
-                    child: Text('Consultar preços'),
-                    value: Menu.itemOne,
-                  ),
                   PopupMenuItem<Menu>(
                     child: Text('Sair'),
                     value: Menu.itemTwo,
@@ -124,9 +118,114 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(
-                height: 20,
+                height: 12,
               ),
-              Row(
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Pedidos',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                            ),
+                            Icon(
+                              Icons.article,
+                              size: 50,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
+                        onPressed: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NovoPedido()));
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Clientes',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                            ),
+                            Icon(
+                              Icons.person,
+                              size: 50,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
+                        onPressed: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ConsultaCliente()));
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Produtos',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                            ),
+                            Icon(
+                              Icons.widgets,
+                              size: 50,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
+                        onPressed: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ConsultaPreco()));
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              /*Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
@@ -175,7 +274,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ],
-              ),
+              ),*/
               SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

@@ -29,7 +29,7 @@ class _ConsultaPrecoState extends State<ConsultaPreco> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Consultar preços"),
+          title: Text("Consultar produtos"),
         ),
         body: Column(
           children: [
@@ -111,11 +111,14 @@ class _ConsultaPrecoState extends State<ConsultaPreco> {
         if (snapshot.hasData) {
           produtos = snapshot.data;
           return Expanded(
-            child: ListView.builder(
-              itemCount: produtos!.length,
-              itemBuilder: (context, index) {
-                return _produtoCard(context, produtos![index]);
-              },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: ListView.builder(
+                itemCount: produtos!.length,
+                itemBuilder: (context, index) {
+                  return _produtoCard(context, produtos![index]);
+                },
+              ),
             ),
           );
         } else if (snapshot.hasError) {
@@ -136,6 +139,7 @@ class _ConsultaPrecoState extends State<ConsultaPreco> {
         Navigator.pushNamed(context, ViewProduto.routeName, arguments: prod);
       },
       child: Card(
+        color: Colors.white70,
         child: Padding(
           padding: EdgeInsets.all(10),
           child: Row(
