@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
 import 'package:prototipo/objects/cond_pgto.dart';
@@ -137,7 +138,7 @@ class _AtualizarState extends State<Atualizar> {
 
     if (response.statusCode == 200) {
       final List<List<dynamic>> rowsAsListOfValues = CsvToListConverter().convert(response.body);
-
+      print(rowsAsListOfValues[11]);
       await helper.recreateTable('clientes');
       await helper.saveClientes(rowsAsListOfValues);
       Future<List<Cliente>> l = helper.getTodosClientes();

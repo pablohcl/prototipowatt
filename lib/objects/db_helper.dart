@@ -123,7 +123,6 @@ class DbHelper {
     var batch = dbProd!.batch();
     for (int i = 1; i < listCli.length; i++) {
       final linha = listCli[i].toString().split(';');
-      print(linha[12]);
       final Map<String, dynamic> map = {
         idCliColumn: linha[0].substring(1),
         cliRazaoColumn: linha[1],
