@@ -129,11 +129,14 @@ class _ConsultaClienteState extends State<ConsultaCliente> {
         if (snapshot.hasData) {
           clientes = snapshot.data;
           return Expanded(
-            child: ListView.builder(
-              itemCount: clientes!.length,
-              itemBuilder: (context, index) {
-                return _clienteCard(context, clientes![index]);
-              },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: ListView.builder(
+                itemCount: clientes!.length,
+                itemBuilder: (context, index) {
+                  return _clienteCard(context, clientes![index]);
+                },
+              ),
             ),
           );
         } else if (snapshot.hasError) {
@@ -152,6 +155,7 @@ class _ConsultaClienteState extends State<ConsultaCliente> {
         Navigator.pushNamed(context, ViewCliente.routeName, arguments: cli);
       },
       child: Card(
+        color: Colors.white70,
         child: Padding(
           padding: EdgeInsets.all(10),
           child: Row(
