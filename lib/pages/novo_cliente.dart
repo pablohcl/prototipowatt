@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:prototipo/objects/cliente.dart';
 import 'package:prototipo/objects/db_helper.dart';
 
-
 Future<Cliente> fetchDados(String cnpj) async {
   final response =
       await http.get(Uri.parse('https://receitaws.com.br/v1/cnpj/$cnpj'));
@@ -192,470 +191,488 @@ class _NovoClienteState extends State<NovoCliente> {
       );
     } else if (tipoCadastro == 'fisica') {
       return FutureBuilder(
-        future: helper.getLastId(tabelaClienteNovo, idCliColumn),
-        builder: (context, snapshot) {
-          if(snapshot.hasError){
-            return Text('${snapshot.error}');
-          } else if(snapshot.hasData){
-            idNovoCliente = int.parse(snapshot.data.toString());
-            return Form(
-              key: _formKey,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Icon(
-                      Icons.person_add,
-                      size: 88,
-                      color: Colors.green,
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: 8,
-                        ),
-                        TextFormField(
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(14),
-                          ],
-                          focusNode: _cpfFocus,
-                          keyboardType: TextInputType.number,
-                          validator: (value) {
-                            if(value!.length != 11){
-                              FocusScope.of(context).requestFocus(_cpfFocus);
-                              return 'CPF inválido!';
-                            } else {
-                              return null;
-                            }
-                          },
-                          controller: cnpjController,
-                          decoration: InputDecoration(
-                            labelText: 'CPF',
-                            labelStyle: TextStyle(color: Colors.green),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
+          future: helper.getLastId(tabelaClienteNovo, idCliColumn),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            } else if (snapshot.hasData) {
+              idNovoCliente = int.parse(snapshot.data.toString());
+              return Form(
+                key: _formKey,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Icon(
+                        Icons.person_add,
+                        size: 88,
+                        color: Colors.green,
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Column(
+                        children: [
+                          SizedBox(
+                            height: 8,
+                          ),
+                          TextFormField(
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(14),
+                              CpfTextFormatter(),
+                            ],
+                            focusNode: _cpfFocus,
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value!.length != 11) {
+                                FocusScope.of(context).requestFocus(_cpfFocus);
+                                return 'CPF inválido!';
+                              } else {
+                                return null;
+                              }
+                            },
+                            controller: cnpjController,
+                            decoration: InputDecoration(
+                              labelText: 'CPF',
+                              labelStyle: TextStyle(color: Colors.green),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextFormField(
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(10),
-                            UpperCaseTextFormatter(),
-                          ],
-                          focusNode: _inscrFocus,
-                          validator: (value) {
-                            if(value!.length != 10 && !value.contains('ISENTO')){
-                              FocusScope.of(context).requestFocus(_cpfFocus);
-                              return 'Inscrição estadual inválida!';
-                            } else {
-                              return null;
-                            }
-                          },
-                          controller: inscrController,
-                          decoration: InputDecoration(
-                            labelText: 'Inscrição estadual',
-                            labelStyle: TextStyle(color: Colors.green),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(10),
+                              UpperCaseTextFormatter(),
+                            ],
+                            focusNode: _inscrFocus,
+                            validator: (value) {
+                              if (value!.length != 10 &&
+                                  !value.contains('ISENTO')) {
+                                FocusScope.of(context).requestFocus(_cpfFocus);
+                                return 'Inscrição estadual inválida!';
+                              } else {
+                                return null;
+                              }
+                            },
+                            controller: inscrController,
+                            decoration: InputDecoration(
+                              labelText: 'Inscrição estadual',
+                              labelStyle: TextStyle(color: Colors.green),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextFormField(
-                          validator: (value) {
-                            if(value!.isEmpty){
-                              FocusScope.of(context).requestFocus(_nomeFocus);
-                              return 'Preencha o nome!';
-                            } else {
-                              return null;
-                            }
-                          },
-                          focusNode: _nomeFocus,
-                          controller: razaoController,
-                          keyboardType: TextInputType.name,
-                          decoration: InputDecoration(
-                            label: Text('Nome'),
-                            labelStyle: TextStyle(color: Colors.green),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                FocusScope.of(context).requestFocus(_nomeFocus);
+                                return 'Preencha o nome!';
+                              } else {
+                                return null;
+                              }
+                            },
+                            focusNode: _nomeFocus,
+                            controller: razaoController,
+                            keyboardType: TextInputType.name,
+                            decoration: InputDecoration(
+                              label: Text('Nome'),
+                              labelStyle: TextStyle(color: Colors.green),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextFormField(
-                          validator: (value) {
-                            if(value!.isEmpty){
-                              FocusScope.of(context).requestFocus(_apelidoFocus);
-                              return 'Campo obrigatório!';
-                            } else {
-                              return null;
-                            }
-                          },
-                          focusNode: _apelidoFocus,
-                          controller: fantasiaController,
-                          keyboardType: TextInputType.name,
-                          decoration: InputDecoration(
-                            label: Text('Apelido / Nome Fantasia'),
-                            labelStyle: TextStyle(color: Colors.green),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                FocusScope.of(context)
+                                    .requestFocus(_apelidoFocus);
+                                return 'Campo obrigatório!';
+                              } else {
+                                return null;
+                              }
+                            },
+                            focusNode: _apelidoFocus,
+                            controller: fantasiaController,
+                            keyboardType: TextInputType.name,
+                            decoration: InputDecoration(
+                              label: Text('Apelido / Nome Fantasia'),
+                              labelStyle: TextStyle(color: Colors.green),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 3,
-                              child: TextFormField(
-                                focusNode: _cepFocus,
-                                validator: (value){
-                                  if(value!.length != 8){
-                                    FocusScope.of(context).requestFocus(_cepFocus);
-                                    return 'CEP inválido!';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                controller: cepController,
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(8),
-                                ],
-                                keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
-                                  label: Text('CEP'),
-                                  labelStyle: TextStyle(color: Colors.green),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: TextFormField(
+                                  focusNode: _cepFocus,
+                                  validator: (value) {
+                                    if (value!.length != 8) {
+                                      FocusScope.of(context)
+                                          .requestFocus(_cepFocus);
+                                      return 'CEP inválido!';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  controller: cepController,
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(8),
+                                  ],
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    label: Text('CEP'),
+                                    labelStyle: TextStyle(color: Colors.green),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Expanded(
-                              flex: 6,
-                              child: TextFormField(
-                                focusNode: _bairroFocus,
-                                validator: (value){
-                                  if(value!.isEmpty){
-                                    FocusScope.of(context).requestFocus(_bairroFocus);
-                                    return 'Campo obrigatório!';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                controller: bairroController,
-                                keyboardType: TextInputType.text,
-                                decoration: InputDecoration(
-                                  label: Text('Bairro'),
-                                  labelStyle: TextStyle(color: Colors.green),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                              SizedBox(
+                                width: 8,
+                              ),
+                              Expanded(
+                                flex: 6,
+                                child: TextFormField(
+                                  focusNode: _bairroFocus,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      FocusScope.of(context)
+                                          .requestFocus(_bairroFocus);
+                                      return 'Campo obrigatório!';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  controller: bairroController,
+                                  keyboardType: TextInputType.text,
+                                  decoration: InputDecoration(
+                                    label: Text('Bairro'),
+                                    labelStyle: TextStyle(color: Colors.green),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 8,
-                              child: TextFormField(
-                                focusNode: _ruaFocus,
-                                validator: (value){
-                                  if(value!.isEmpty){
-                                    FocusScope.of(context).requestFocus(_ruaFocus);
-                                    return 'Campo obrigatório!';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                controller: ruaController,
-                                keyboardType: TextInputType.streetAddress,
-                                decoration: InputDecoration(
-                                  label: Text('Rua'),
-                                  labelStyle: TextStyle(color: Colors.green),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 8,
+                                child: TextFormField(
+                                  focusNode: _ruaFocus,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      FocusScope.of(context)
+                                          .requestFocus(_ruaFocus);
+                                      return 'Campo obrigatório!';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  controller: ruaController,
+                                  keyboardType: TextInputType.streetAddress,
+                                  decoration: InputDecoration(
+                                    label: Text('Rua'),
+                                    labelStyle: TextStyle(color: Colors.green),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: TextFormField(
-                                focusNode: _numFocus,
-                                validator: (value){
-                                  if(value!.isEmpty){
-                                    FocusScope.of(context).requestFocus(_numFocus);
-                                    return 'Campo obrigatório!';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                controller: numeroController,
-                                keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
-                                  label: Text('Nº'),
-                                  labelStyle: TextStyle(color: Colors.green),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                              SizedBox(
+                                width: 8,
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: TextFormField(
+                                  focusNode: _numFocus,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      FocusScope.of(context)
+                                          .requestFocus(_numFocus);
+                                      return 'Campo obrigatório!';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  controller: numeroController,
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    label: Text('Nº'),
+                                    labelStyle: TextStyle(color: Colors.green),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 8,
-                              child: TextFormField(
-                                focusNode: _cidadeFocus,
-                                validator: (value){
-                                  if(value!.isEmpty){
-                                    FocusScope.of(context).requestFocus(_cidadeFocus);
-                                    return 'Campo obrigatório!';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                controller: municipioController,
-                                keyboardType: TextInputType.text,
-                                decoration: InputDecoration(
-                                  label: Text('Município'),
-                                  labelStyle: TextStyle(color: Colors.green),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 8,
+                                child: TextFormField(
+                                  focusNode: _cidadeFocus,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      FocusScope.of(context)
+                                          .requestFocus(_cidadeFocus);
+                                      return 'Campo obrigatório!';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  controller: municipioController,
+                                  keyboardType: TextInputType.text,
+                                  decoration: InputDecoration(
+                                    label: Text('Município'),
+                                    labelStyle: TextStyle(color: Colors.green),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: TextFormField(
-                                focusNode: _ufFocus,
-                                validator: (value){
-                                  if(value!.length != 2){
-                                    FocusScope.of(context).requestFocus(_ufFocus);
-                                    return 'UF inválida!';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                controller: ufController,
-                                keyboardType: TextInputType.text,
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(2),
-                                ],
-                                decoration: InputDecoration(
-                                  label: Text('UF'),
-                                  labelStyle: TextStyle(color: Colors.green),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                              SizedBox(
+                                width: 8,
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: TextFormField(
+                                  focusNode: _ufFocus,
+                                  validator: (value) {
+                                    if (value!.length != 2) {
+                                      FocusScope.of(context)
+                                          .requestFocus(_ufFocus);
+                                      return 'UF inválida!';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  controller: ufController,
+                                  keyboardType: TextInputType.text,
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(2),
+                                  ],
+                                  decoration: InputDecoration(
+                                    label: Text('UF'),
+                                    labelStyle: TextStyle(color: Colors.green),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 2,
-                              child: TextFormField(
-                                focusNode: _dddFocus,
-                                validator: (value){
-                                  if(value!.length != 2){
-                                    FocusScope.of(context).requestFocus(_dddFocus);
-                                    return 'Campo obrigatório!';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                controller: dddController,
-                                keyboardType: TextInputType.text,
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(2),
-                                ],
-                                decoration: InputDecoration(
-                                  label: Text('DDD'),
-                                  labelStyle: TextStyle(color: Colors.green),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: TextFormField(
+                                  focusNode: _dddFocus,
+                                  validator: (value) {
+                                    if (value!.length != 2) {
+                                      FocusScope.of(context)
+                                          .requestFocus(_dddFocus);
+                                      return 'Campo obrigatório!';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  controller: dddController,
+                                  keyboardType: TextInputType.text,
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(2),
+                                  ],
+                                  decoration: InputDecoration(
+                                    label: Text('DDD'),
+                                    labelStyle: TextStyle(color: Colors.green),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Expanded(
-                              flex: 8,
-                              child: TextFormField(
-                                focusNode: _fone1Focus,
-                                validator: (value){
-                                  if(value!.length < 8){
-                                    FocusScope.of(context).requestFocus(_fone1Focus);
-                                    return 'Telefone inválido!';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                controller: fone1Controller,
-                                keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
-                                  label: Text('Telefone 1'),
-                                  labelStyle: TextStyle(color: Colors.green),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                              SizedBox(
+                                width: 8,
+                              ),
+                              Expanded(
+                                flex: 8,
+                                child: TextFormField(
+                                  focusNode: _fone1Focus,
+                                  validator: (value) {
+                                    if (value!.length < 8) {
+                                      FocusScope.of(context)
+                                          .requestFocus(_fone1Focus);
+                                      return 'Telefone inválido!';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  controller: fone1Controller,
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    label: Text('Telefone 1'),
+                                    labelStyle: TextStyle(color: Colors.green),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextFormField(
-                          validator: (value) {
-                            if(value!.contains('@')){
-                              return null;
-                            } else {
-                              FocusScope.of(context).requestFocus(_emailFocus);
-                              return 'E-mail inválido!';
-                            }
-                          },
-                          controller: emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                            label: Text('E-mail'),
-                            labelStyle: TextStyle(color: Colors.green),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            validator: (value) {
+                              if (value!.contains('@')) {
+                                return null;
+                              } else {
+                                FocusScope.of(context)
+                                    .requestFocus(_emailFocus);
+                                return 'E-mail inválido!';
+                              }
+                            },
+                            controller: emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(
+                              label: Text('E-mail'),
+                              labelStyle: TextStyle(color: Colors.green),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  if(_formKey.currentState!.validate()){
-                                    print(idNovoCliente+1);
-                                    print('ID DO CLIENTE CADASTRADO');
-                                    final Map<String, dynamic> map = {
-                                      // CRIAR TABELA t_cliente_novo
-                                      idCliColumn: idNovoCliente+1,
-                                      cliDocColumn: cnpjController.text,
-                                      cliInscrColumn: inscrController.text,
-                                      cliRazaoColumn: razaoController.text,
-                                      cliFantasiaColumn: fantasiaController.text,
-                                      cliCepColumn: cepController.text,
-                                      cliRuaColumn: ruaController.text,
-                                      cliNumColumn: numeroController.text,
-                                      cliBairroColumn: bairroController.text,
-                                      cliCidadeColumn: municipioController.text,
-                                      cliUfColumn: ufController.text,
-                                      cliDDDColumn: dddController.text,
-                                      cliFone1Column: fone1Controller.text,
-                                      cliPjColumn: 'FALSO',
-                                      cliEmailColumn: emailController.text,
-                                    };
-                                    helper.saveClienteNovo(map);
-                                    //print(map);
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                        title: Text(
-                                          'Cliente cadastrado com Sucesso!',
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              _formKey.currentState!.reset();
-                                              Navigator.of(context).pop();
-                                              tipoCadastro = 'fisica';
-                                              cnpjController.text = '';
-                                              inscrController.text = '';
-                                              razaoController.text = '';
-                                              fantasiaController.text = '';
-                                              cepController.text = '';
-                                              bairroController.text = '';
-                                              ruaController.text = '';
-                                              numeroController.text = '';
-                                              municipioController.text = '';
-                                              ufController.text = '';
-                                              dddController.text = '';
-                                              fone1Controller.text = '';
-                                              emailController.text = '';
-                                              setState(() {
-                                                montaTela();
-                                              });
-                                            },
-                                            child: Text(
-                                              'OK',
-                                              style: TextStyle(color: Colors.black),
-                                            ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      print(idNovoCliente + 1);
+                                      print('ID DO CLIENTE CADASTRADO');
+                                      final Map<String, dynamic> map = {
+                                        // CRIAR TABELA t_cliente_novo
+                                        idCliColumn: idNovoCliente + 1,
+                                        cliDocColumn: cnpjController.text,
+                                        cliInscrColumn: inscrController.text,
+                                        cliRazaoColumn: razaoController.text,
+                                        cliFantasiaColumn:
+                                            fantasiaController.text,
+                                        cliCepColumn: cepController.text,
+                                        cliRuaColumn: ruaController.text,
+                                        cliNumColumn: numeroController.text,
+                                        cliBairroColumn: bairroController.text,
+                                        cliCidadeColumn:
+                                            municipioController.text,
+                                        cliUfColumn: ufController.text,
+                                        cliDDDColumn: dddController.text,
+                                        cliFone1Column: fone1Controller.text,
+                                        cliPjColumn: 'FALSO',
+                                        cliEmailColumn: emailController.text,
+                                      };
+                                      helper.saveClienteNovo(map);
+                                      //print(map);
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          title: Text(
+                                            'Cliente cadastrado com Sucesso!',
+                                            style:
+                                                TextStyle(color: Colors.black),
                                           ),
-                                        ],
-                                      ),
-                                    );
-                                  };
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                  child: Text(
-                                    'Salvar',
-                                    style: TextStyle(fontSize: 18),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                _formKey.currentState!.reset();
+                                                Navigator.of(context).pop();
+                                                tipoCadastro = 'fisica';
+                                                cnpjController.text = '';
+                                                inscrController.text = '';
+                                                razaoController.text = '';
+                                                fantasiaController.text = '';
+                                                cepController.text = '';
+                                                bairroController.text = '';
+                                                ruaController.text = '';
+                                                numeroController.text = '';
+                                                municipioController.text = '';
+                                                ufController.text = '';
+                                                dddController.text = '';
+                                                fone1Controller.text = '';
+                                                emailController.text = '';
+                                                setState(() {
+                                                  montaTela();
+                                                });
+                                              },
+                                              child: Text(
+                                                'OK',
+                                                style: TextStyle(
+                                                    color: Colors.black),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }
+                                    ;
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10.0),
+                                    child: Text(
+                                      'Salvar',
+                                      style: TextStyle(fontSize: 18),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
-                    /*TextFormField(
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
+                      /*TextFormField(
                     keyboardType: TextInputType.number,
                     controller: cpfController,
                     validator: (value) {},
@@ -667,14 +684,13 @@ class _NovoClienteState extends State<NovoCliente> {
                       ),
                     ),
                   ),*/
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            );
-          }
-          return Center(child: const CircularProgressIndicator());
-        }
-      );
+              );
+            }
+            return Center(child: const CircularProgressIndicator());
+          });
     } else if (tipoCadastro == 'juridica') {
       return Form(
         key: _formKey,
@@ -1035,7 +1051,8 @@ class _NovoClienteState extends State<NovoCliente> {
 
 class UpperCaseTextFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     return TextEditingValue(
       text: newValue.text.toUpperCase(),
       selection: newValue.selection,
@@ -1046,29 +1063,36 @@ class UpperCaseTextFormatter extends TextInputFormatter {
 // ######### TERMINAR ESSA FUNÇÃO (buga quando tenta apagar os caracteres)
 class CpfTextFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue){
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     final int newTextLength = newValue.text.length;
     int selectionIndex = newValue.selection.end;
     int usedSubstringIndex = 0;
     final StringBuffer newText = StringBuffer();
     if (newTextLength == 4) {
-      newText.write(newValue.text.substring(0, usedSubstringIndex = 3) + '.');
-      if (newValue.selection.end >= 4)
-        selectionIndex ++;
+      if(!newValue.text.contains('.')){
+        newText.write(newValue.text.substring(0, usedSubstringIndex = 3) + '.');
+        if (newValue.selection.end >= 4) selectionIndex++;
+      }
     }
+
+    // ARRUMAR AQUI (pegar apenas a metade da string para verificar)
+
     if (newTextLength == 8) {
-      newText.write(newValue.text.substring(0, usedSubstringIndex = 7) + '.');
-      if (newValue.selection.end >= 8)
-        selectionIndex++;
+      if(!newValue.text.contains('.')){
+        newText.write(newValue.text.substring(0, usedSubstringIndex = 7) + '.');
+        if (newValue.selection.end >= 8) selectionIndex++;
+      }
     }
     if (newTextLength == 12) {
-      newText.write(newValue.text.substring(0, usedSubstringIndex = 11) + '-');
-      if (newValue.selection.end >= 12)
-        selectionIndex++;
+      if(!newValue.text.contains('-')){
+        newText.write(newValue.text.substring(0, usedSubstringIndex = 11) + '-');
+        if (newValue.selection.end >= 12) selectionIndex++;
+      }
     }
 
     // Dump the rest
-    if(newTextLength >= usedSubstringIndex){
+    if (newTextLength >= usedSubstringIndex) {
       newText.write(newValue.text.substring(usedSubstringIndex));
       return TextEditingValue(
         text: newText.toString(),
