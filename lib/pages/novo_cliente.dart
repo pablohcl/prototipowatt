@@ -1079,13 +1079,13 @@ class CpfTextFormatter extends TextInputFormatter {
     // ARRUMAR AQUI (pegar apenas a metade da string para verificar)
 
     if (newTextLength == 8) {
-      if(!newValue.text.contains('.')){
+      if(!newValue.text.substring(4).contains('.')){
         newText.write(newValue.text.substring(0, usedSubstringIndex = 7) + '.');
         if (newValue.selection.end >= 8) selectionIndex++;
       }
     }
     if (newTextLength == 12) {
-      if(!newValue.text.contains('-')){
+      if(!newValue.text.substring(8).contains('-')){
         newText.write(newValue.text.substring(0, usedSubstringIndex = 11) + '-');
         if (newValue.selection.end >= 12) selectionIndex++;
       }
