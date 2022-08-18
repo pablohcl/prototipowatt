@@ -92,7 +92,6 @@ class DbHelper {
         .rawQuery("SELECT * FROM $table ORDER BY $coluna DESC");
 
     if (maps.isNotEmpty) {
-      print(maps.toString());
       return maps.first[idCliColumn];
     } else {
       return 0;
@@ -201,7 +200,6 @@ class DbHelper {
         .rawQuery("SELECT * FROM $tabelaProduto WHERE $idColumn = $id");
 
     if (maps.isNotEmpty) {
-      print(maps.toString());
       return Produto.fromMap(maps.first);
     } else {
       return new Produto(
@@ -216,7 +214,6 @@ class DbHelper {
         .rawQuery("SELECT * FROM $tabelaClientes WHERE $idCliColumn = $id");
 
     if (maps.isNotEmpty) {
-      print(maps.toString());
       return Cliente.fromMap(maps.first);
     } else {
       return new Cliente(
@@ -237,7 +234,6 @@ class DbHelper {
         .rawQuery("SELECT * FROM $tabelaValores WHERE $idVlrColumn = $id");
 
     if (maps.isNotEmpty) {
-      print(maps.toString());
       return ProdVlr.fromMap(maps.first);
     } else {
       return new ProdVlr(

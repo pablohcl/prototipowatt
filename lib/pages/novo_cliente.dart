@@ -588,12 +588,10 @@ class _NovoClienteState extends State<NovoCliente> {
                                 child: ElevatedButton(
                                   onPressed: () {
                                     if (_formKey.currentState!.validate()) {
-                                      print(idNovoCliente + 1);
-                                      print('ID DO CLIENTE CADASTRADO');
                                       final Map<String, dynamic> map = {
                                         // CRIAR TABELA t_cliente_novo
                                         idCliColumn: idNovoCliente + 1,
-                                        cliDocColumn: cnpjController.text,
+                                        cliDocColumn: cnpjController.text.replaceAll('.', '').replaceAll('-', ''),
                                         cliInscrColumn: inscrController.text,
                                         cliRazaoColumn: razaoController.text,
                                         cliFantasiaColumn:
@@ -611,7 +609,6 @@ class _NovoClienteState extends State<NovoCliente> {
                                         cliEmailColumn: emailController.text,
                                       };
                                       helper.saveClienteNovo(map);
-                                      //print(map);
                                       showDialog(
                                         context: context,
                                         builder: (context) => AlertDialog(
@@ -1060,7 +1057,6 @@ class UpperCaseTextFormatter extends TextInputFormatter {
   }
 }
 
-// ######### TERMINAR ESSA FUNÇÃO (buga quando tenta apagar os caracteres)
 class CpfTextFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
@@ -1075,9 +1071,6 @@ class CpfTextFormatter extends TextInputFormatter {
         if (newValue.selection.end >= 4) selectionIndex++;
       }
     }
-
-    // ARRUMAR AQUI (pegar apenas a metade da string para verificar)
-
     if (newTextLength == 8) {
       if(!newValue.text.substring(4).contains('.')){
         newText.write(newValue.text.substring(0, usedSubstringIndex = 7) + '.');
