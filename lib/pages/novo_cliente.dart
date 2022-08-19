@@ -6,6 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototipo/objects/cliente.dart';
 import 'package:prototipo/objects/db_helper.dart';
+import 'package:prototipo/text-formatters/inscr_estadual_formatter.dart';
+
+import '../text-formatters/cpf_text_formatter.dart';
+import '../text-formatters/upper_case_text_formatter.dart';
 
 Future<Cliente> fetchDados(String cnpj) async {
   final response =
@@ -246,8 +250,9 @@ class _NovoClienteState extends State<NovoCliente> {
                           ),
                           TextFormField(
                             inputFormatters: [
-                              LengthLimitingTextInputFormatter(10),
+                              LengthLimitingTextInputFormatter(11),
                               UpperCaseTextFormatter(),
+                              InscrEstadualFormatter(),
                             ],
                             focusNode: _inscrFocus,
                             validator: (value) {
@@ -592,7 +597,7 @@ class _NovoClienteState extends State<NovoCliente> {
                                         // CRIAR TABELA t_cliente_novo
                                         idCliColumn: idNovoCliente + 1,
                                         cliDocColumn: cnpjController.text.replaceAll('.', '').replaceAll('-', ''),
-                                        cliInscrColumn: inscrController.text,
+                                        cliInscrColumn: inscrController.text.replaceAll('/', ''),
                                         cliRazaoColumn: razaoController.text,
                                         cliFantasiaColumn:
                                             fantasiaController.text,
@@ -1043,56 +1048,5 @@ class _NovoClienteState extends State<NovoCliente> {
         },
       );
     }
-  }
-}
-
-class UpperCaseTextFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    return TextEditingValue(
-      text: newValue.text.toUpperCase(),
-      selection: newValue.selection,
-    );
-  }
-}
-
-class CpfTextFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    final int newTextLength = newValue.text.length;
-    int selectionIndex = newValue.selection.end;
-    int usedSubstringIndex = 0;
-    final StringBuffer newText = StringBuffer();
-    if (newTextLength == 4) {
-      if(!newValue.text.contains('.')){
-        newText.write(newValue.text.substring(0, usedSubstringIndex = 3) + '.');
-        if (newValue.selection.end >= 4) selectionIndex++;
-      }
-    }
-    if (newTextLength == 8) {
-      if(!newValue.text.substring(4).contains('.')){
-        newText.write(newValue.text.substring(0, usedSubstringIndex = 7) + '.');
-        if (newValue.selection.end >= 8) selectionIndex++;
-      }
-    }
-    if (newTextLength == 12) {
-      if(!newValue.text.substring(8).contains('-')){
-        newText.write(newValue.text.substring(0, usedSubstringIndex = 11) + '-');
-        if (newValue.selection.end >= 12) selectionIndex++;
-      }
-    }
-
-    // Dump the rest
-    if (newTextLength >= usedSubstringIndex) {
-      newText.write(newValue.text.substring(usedSubstringIndex));
-      return TextEditingValue(
-        text: newText.toString(),
-        selection: TextSelection.collapsed(offset: selectionIndex),
-      );
-    }
-
-    throw 'Erro no CpfTextFormatter!';
   }
 }
