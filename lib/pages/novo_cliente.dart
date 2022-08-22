@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototipo/objects/cliente.dart';
 import 'package:prototipo/objects/db_helper.dart';
+import 'package:prototipo/text-formatters/cep_formatter.dart';
+import 'package:prototipo/text-formatters/fone_formatter.dart';
 import 'package:prototipo/text-formatters/inscr_estadual_formatter.dart';
 
 import '../text-formatters/cpf_text_formatter.dart';
@@ -340,7 +342,8 @@ class _NovoClienteState extends State<NovoCliente> {
                                   },
                                   controller: cepController,
                                   inputFormatters: [
-                                    LengthLimitingTextInputFormatter(8),
+                                    LengthLimitingTextInputFormatter(9),
+                                    CepFormatter(),
                                   ],
                                   keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
@@ -538,6 +541,10 @@ class _NovoClienteState extends State<NovoCliente> {
                               Expanded(
                                 flex: 8,
                                 child: TextFormField(
+                                  inputFormatters: [
+                                    FoneFormatter(),
+                                    LengthLimitingTextInputFormatter(10),
+                                  ],
                                   focusNode: _fone1Focus,
                                   validator: (value) {
                                     if (value!.length < 8) {
@@ -601,7 +608,7 @@ class _NovoClienteState extends State<NovoCliente> {
                                         cliRazaoColumn: razaoController.text,
                                         cliFantasiaColumn:
                                             fantasiaController.text,
-                                        cliCepColumn: cepController.text,
+                                        cliCepColumn: cepController.text.replaceAll('-', ''),
                                         cliRuaColumn: ruaController.text,
                                         cliNumColumn: numeroController.text,
                                         cliBairroColumn: bairroController.text,
@@ -609,7 +616,7 @@ class _NovoClienteState extends State<NovoCliente> {
                                             municipioController.text,
                                         cliUfColumn: ufController.text,
                                         cliDDDColumn: dddController.text,
-                                        cliFone1Column: fone1Controller.text,
+                                        cliFone1Column: fone1Controller.text.replaceAll('-', ''),
                                         cliPjColumn: 'FALSO',
                                         cliEmailColumn: emailController.text,
                                       };
