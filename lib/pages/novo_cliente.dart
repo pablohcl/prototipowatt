@@ -10,6 +10,7 @@ import 'package:prototipo/text-formatters/cep_formatter.dart';
 import 'package:prototipo/text-formatters/fone_formatter.dart';
 import 'package:prototipo/text-formatters/inscr_estadual_formatter.dart';
 
+import '../text-formatters/cnpj_formatter.dart';
 import '../text-formatters/cpf_text_formatter.dart';
 import '../text-formatters/upper_case_text_formatter.dart';
 
@@ -55,6 +56,7 @@ class _NovoClienteState extends State<NovoCliente> {
   late int idNovoCliente;
 
   final _cpfFocus = FocusNode();
+  final _cnpjFocus = FocusNode();
   final _emailFocus = FocusNode();
   final _nomeFocus = FocusNode();
   final _apelidoFocus = FocusNode();
@@ -721,9 +723,21 @@ class _NovoClienteState extends State<NovoCliente> {
                   Expanded(
                     flex: 7,
                     child: TextFormField(
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(18),
+                        CnpjFormatter(),
+                      ],
+                      focusNode: _cnpjFocus,
                       keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value!.length != 18) {
+                          FocusScope.of(context).requestFocus(_cpfFocus);
+                          return 'CNPJ inválido!';
+                        } else {
+                          return null;
+                        }
+                      },
                       controller: cnpjController,
-                      validator: (value) {},
                       decoration: InputDecoration(
                         labelText: 'CNPJ',
                         labelStyle: TextStyle(color: Colors.green),
@@ -846,7 +860,7 @@ class _NovoClienteState extends State<NovoCliente> {
       return Text('');
     } else {
       return FutureBuilder<Cliente>(
-        future: fetchDados(cnpj),
+        future: fetchDados(cnpj.replaceAll('.', '').replaceAll('/', '').replaceAll('-', '')),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Column(
